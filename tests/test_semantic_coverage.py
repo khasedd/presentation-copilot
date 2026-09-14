@@ -1,12 +1,15 @@
 """Unit tests for the semantic-coverage experiment's deterministic behavior."""
 
 import json
+import tempfile
 import unittest
+from pathlib import Path
 
 from experiments.semantic_coverage import (
     CONCEPTS,
     CoverageResultError,
     build_messages,
+    load_api_key,
     parse_coverage_result,
 )
 
@@ -72,6 +75,19 @@ class PromptTests(unittest.TestCase):
         self.assertIn("semantic meaning", system_prompt)
         self.assertIn("keyword", system_prompt)
         self.assertIn("not_covered", system_prompt)
+
+
+class ConfigurationTests(unittest.TestCase):
+    def test_loads_key_from_existing_env_file_without_executing_it(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            env_path = Path(directory) / ".env"
+            env_path.write_text(
+                "UNRELATED=value\nNEBIUS_API_KEY='local-test-key'\n", encoding="utf-8"
+            )
+
+            api_key = load_api_key({}, env_path)
+
+        self.assertEqual(api_key, "local-test-key")
 
 
 if __name__ == "__main__":
