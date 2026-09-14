@@ -13,6 +13,8 @@ dist/
 build/
 coverage/
 .cache/
+__pycache__/
+*.py[cod]
 
 # Tooling and operating-system files
 .DS_Store
