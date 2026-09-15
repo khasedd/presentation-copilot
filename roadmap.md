@@ -13,6 +13,7 @@ This document is both the development checklist and the verified historical reco
 
 ## Phase 1 — Hackathon stack discovery
 
+- [x] Selected `nvidia/nemotron-3-super-120b-a12b` through Nebius Token Factory for the first semantic-coverage proof of concept. Rationale: Nebius documents it as currently available through an OpenAI-compatible API and optimized for complex reasoning/instruction following; it is a deliberately provisional interactive-classification choice, not a benchmarked production decision. See `experiments/README.md`.
 - [ ] Read current official Nebius Token Factory documentation and validate authentication, model availability, API behavior, quotas/credits, and pricing assumptions.
 - [ ] Investigate relevant Nebius AI Cloud options (including Serverless Jobs, Serverless Endpoints, DevPods, and any then-permitted alternatives) without assuming deployment selection.
 - [ ] Identify NVIDIA open-source model candidates and evaluate Nemotron Nano, Super, and Ultra variants for the distinct live workloads.
@@ -35,10 +36,10 @@ This document is both the development checklist and the verified historical reco
 
 ## Phase 4 — Semantic slide coverage
 
-- [ ] Define what evidence constitutes meaningful concept coverage versus superficial keyword overlap.
-- [ ] Build a measurable prototype that compares transcript segments with slide concepts using the selected substantive NVIDIA/Nebius inference path.
+- [x] Defined the first proof-of-concept criterion: a concept is covered only when the transcript communicates its semantic meaning; paraphrases count, and keyword-only mentions do not. The model prompt and strict output contract enforce this criterion for the fixed experiment.
+- [x] Built and live-verified `experiments/semantic_coverage.py`, which sends a slide title, three required concepts, and a transcript to `nvidia/nemotron-3-super-120b-a12b` through Nebius Token Factory. It requests JSON and validates exact concept IDs/statuses plus `slide_complete` locally.
 - [ ] Establish confidence thresholds, ambiguity handling, correction/override behavior, and evidence retention.
-- [ ] Create representative evaluation cases and measure false coverage and missed coverage.
+- [x] Created and ran four controlled cases against the live model: paraphrased one-concept coverage, keyword-only mention, two-of-three coverage, and all-concepts coverage. All returned the expected statuses; this is a qualitative smoke check, not a representative false-positive/false-negative measurement. Results are recorded in `experiments/README.md`.
 
 ## Phase 5 — Live presentation state and checklist
 
