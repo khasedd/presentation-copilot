@@ -9,10 +9,11 @@ The project is being built for the **Nebius x NVIDIA Global AI Hackathon**, targ
 - [Project background and design constraints](background.md)
 - [Development roadmap and verified progress](roadmap.md)
 - [Operational rules for contributors and agents](AGENTS.md)
+- [Semantic-coverage proof of concept](experiments/README.md)
 
 ## Status
 
-The next task is stack discovery: validate the available Nebius capabilities and NVIDIA models, then select components through measured prototypes. Do not add an application skeleton until that investigation has informed the architecture.
+An isolated semantic-coverage proof of concept now verifies four controlled transcript cases through Nebius Token Factory and NVIDIA Nemotron 3 Super. It is not application architecture or a production-quality evaluation. Broader stack discovery, model comparison, latency/cost measurement, and presentation integration remain future work.
 
 ## License
 
