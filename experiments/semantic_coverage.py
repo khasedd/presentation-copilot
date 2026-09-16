@@ -193,10 +193,12 @@ def parse_coverage_result(
     return result
 
 
-def request_model(messages: list[dict[str, str]], api_key: str) -> str:
-    """Request JSON-only semantic coverage from Token Factory without logging secrets."""
+def request_completion(
+    messages: list[dict[str, str]], api_key: str, model: str = MODEL
+) -> dict[str, Any]:
+    """Return a usable completion envelope, including provider usage for benchmarking."""
     payload = {
-        "model": MODEL,
+        "model": model,
         "messages": messages,
         "temperature": 0,
         "max_tokens": 300,
@@ -231,7 +233,12 @@ def request_model(messages: list[dict[str, str]], api_key: str) -> str:
         ) from error
     if not isinstance(content, str):
         raise TokenFactoryRequestError("Token Factory completion content was not text.")
-    return content
+    return response_data
+
+
+def request_model(messages: list[dict[str, str]], api_key: str) -> str:
+    """Preserve the original POC request interface and default model."""
+    return request_completion(messages, api_key)["choices"][0]["message"]["content"]
 
 
 def evaluate_case(

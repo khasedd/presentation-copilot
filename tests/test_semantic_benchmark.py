@@ -22,7 +22,7 @@ class BenchmarkTests(unittest.TestCase):
         calls = []
         def request(messages, key, model):
             calls.append((model, messages))
-            case = next(c for c in poc.CASES if c.transcript in messages[1]['content'])
+            case = next(c for c in poc.CASES if messages == poc.build_messages(poc.SLIDE_TITLE, poc.CONCEPTS, c.transcript))
             return completion(case.expected_statuses)
         records = bench.run_benchmark('test-key', repeats=3, request_fn=request)
         self.assertEqual(len(records), 48)
