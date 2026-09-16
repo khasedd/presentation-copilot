@@ -10,6 +10,7 @@ The project is being built for the **Nebius x NVIDIA Global AI Hackathon**, targ
 - [Development roadmap and verified progress](roadmap.md)
 - [Operational rules for contributors and agents](AGENTS.md)
 - [Semantic-coverage proof of concept](experiments/README.md)
+- [Phase 1 stack discovery record](docs/phase-1-stack-discovery.md)
 
 ## Status
 
