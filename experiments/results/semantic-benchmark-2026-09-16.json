@@ -1,0 +1,1474 @@
+{
+  "started_at_utc": "2026-09-16T17:20:45.021049+00:00",
+  "finished_at_utc": "2026-09-16T17:21:55.052290+00:00",
+  "endpoint": "https://api.tokenfactory.us-central1.nebius.com/v1/chat/completions",
+  "models": [
+    "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "nvidia/Nemotron-3_5-Lightning",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/Nemotron-3-Ultra-550b-a55b"
+  ],
+  "repeats": 3,
+  "settings": {
+    "temperature": 0,
+    "max_tokens": 300,
+    "response_format": {
+      "type": "json_object"
+    },
+    "timeout_seconds": 30
+  },
+  "method": "Sequential, case-interleaved, model order rotated per round; no retries or warmup exclusion.",
+  "summary": [
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "attempts": 12,
+      "passed": 11,
+      "errors": 1,
+      "mean_seconds": 1.9689527602495218,
+      "median_seconds": 2.034079725497577,
+      "max_seconds": 2.212837202998344,
+      "prompt_tokens": 3069,
+      "completion_tokens": 3245
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "attempts": 12,
+      "passed": 0,
+      "errors": 12,
+      "mean_seconds": 1.6863525660834664,
+      "median_seconds": 1.6729069045031792,
+      "max_seconds": 1.9407014129974414,
+      "prompt_tokens": 3069,
+      "completion_tokens": 3600
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "attempts": 12,
+      "passed": 12,
+      "errors": 0,
+      "mean_seconds": 1.3702557671664788,
+      "median_seconds": 1.237873699501506,
+      "max_seconds": 3.1195470610109624,
+      "prompt_tokens": 3069,
+      "completion_tokens": 2579
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "attempts": 12,
+      "passed": 6,
+      "errors": 6,
+      "mean_seconds": 0.8101802665842115,
+      "median_seconds": 0.828091827002936,
+      "max_seconds": 0.9046569939964684,
+      "prompt_tokens": 3069,
+      "completion_tokens": 3345
+    }
+  ],
+  "records": [
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 1,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 300,
+        "total_tokens": 549
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 2.212837202998344
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 1,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 300,
+        "total_tokens": 549
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.7441381130047375
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 1,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 180,
+        "total_tokens": 429
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 3.1195470610109624
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 1,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 300,
+        "total_tokens": 549
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 0.8365696230030153
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 1,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 264,
+        "total_tokens": 505
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "not_covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 2.027322121997713
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 1,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 300,
+        "total_tokens": 541
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.6073483180080075
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 1,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 213,
+        "total_tokens": 454
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "not_covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.084780094010057
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 1,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 300,
+        "total_tokens": 541
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 0.8831444249954075
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 1,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 274,
+        "total_tokens": 531
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 2.0408373289974406
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 1,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 300,
+        "total_tokens": 557
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.5245252239983529
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 1,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 196,
+        "total_tokens": 453
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.1094865019986173
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 1,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 271,
+        "total_tokens": 528
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 0.784212894999655
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 1,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 300,
+        "total_tokens": 576
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.9779602580092615
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 1,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 300,
+        "total_tokens": 576
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.620467225991888
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 1,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 224,
+        "total_tokens": 500
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "covered"
+          }
+        ],
+        "slide_complete": true
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.245867003002786
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 1,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 244,
+        "total_tokens": 520
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "covered"
+          }
+        ],
+        "slide_complete": true
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 0.653281695995247
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 2,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 300,
+        "total_tokens": 549
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.802646880998509
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 2,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 180,
+        "total_tokens": 429
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.0255285769962939
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 2,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 300,
+        "total_tokens": 549
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 0.8232903650059598
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 2,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 282,
+        "total_tokens": 531
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.8483917900011875
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 2,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 300,
+        "total_tokens": 541
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.660262777004391
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 2,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 213,
+        "total_tokens": 454
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "not_covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.2592724040005123
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 2,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 300,
+        "total_tokens": 541
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 0.9046569939964684
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 2,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 142,
+        "total_tokens": 383
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "not_covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.2766130160016473
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 2,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 300,
+        "total_tokens": 557
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.7588788319990272
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 2,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 218,
+        "total_tokens": 475
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.2819827399944188
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 2,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 271,
+        "total_tokens": 528
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 0.8328932889999123
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 2,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 273,
+        "total_tokens": 530
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 2.073630154001876
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 2,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 300,
+        "total_tokens": 576
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.9407014129974414
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 2,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 225,
+        "total_tokens": 501
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "covered"
+          }
+        ],
+        "slide_complete": true
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.3361384339950746
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 2,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 244,
+        "total_tokens": 520
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "covered"
+          }
+        ],
+        "slide_complete": true
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 0.8192918720014859
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 2,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 299,
+        "total_tokens": 575
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "covered"
+          }
+        ],
+        "slide_complete": true
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 2.155411481988267
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 3,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 249,
+        "total_tokens": 498
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.2090180770028383
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 3,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 300,
+        "total_tokens": 549
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 0.8027267569996184
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 3,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 297,
+        "total_tokens": 546
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.8597260399983497
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 3,
+      "case": "A \u2014 Paraphrased coverage",
+      "expected_statuses": [
+        "covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 249,
+        "completion_tokens": 300,
+        "total_tokens": 549
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.576151725006639
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 3,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 213,
+        "total_tokens": 454
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "not_covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.0798254839901347
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 3,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 300,
+        "total_tokens": 541
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 0.8754350240051281
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 3,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 261,
+        "total_tokens": 502
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "not_covered"
+          },
+          {
+            "id": 2,
+            "status": "not_covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.9462537700019311
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 3,
+      "case": "B \u2014 Keyword only",
+      "expected_statuses": [
+        "not_covered",
+        "not_covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 241,
+        "completion_tokens": 300,
+        "total_tokens": 541
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.5755357649904909
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 3,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 257,
+        "total_tokens": 514
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.4617424339958234
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 3,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 271,
+        "total_tokens": 528
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 0.8445892240124522
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 3,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 274,
+        "total_tokens": 531
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "not_covered"
+          }
+        ],
+        "slide_complete": false
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 2.0751541159988847
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 3,
+      "case": "C \u2014 Partial slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "not_covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 257,
+        "completion_tokens": 300,
+        "total_tokens": 557
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.6855510320019675
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "repeat": 3,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 211,
+        "total_tokens": 487
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "covered"
+          }
+        ],
+        "slide_complete": true
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 1.229880396000226
+    },
+    {
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "repeat": 3,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 244,
+        "total_tokens": 520
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "covered"
+          }
+        ],
+        "slide_complete": true
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 0.6620710349961882
+    },
+    {
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "repeat": 3,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": true,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 279,
+        "total_tokens": 555
+      },
+      "finish_reason": "stop",
+      "result": {
+        "concepts": [
+          {
+            "id": 1,
+            "status": "covered"
+          },
+          {
+            "id": 2,
+            "status": "covered"
+          },
+          {
+            "id": 3,
+            "status": "covered"
+          }
+        ],
+        "slide_complete": true
+      },
+      "outcome": "pass",
+      "elapsed_seconds": 2.1332958429993596
+    },
+    {
+      "model": "nvidia/Nemotron-3_5-Lightning",
+      "repeat": 3,
+      "case": "D \u2014 Complete slide coverage",
+      "expected_statuses": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "matched": false,
+      "usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 300,
+        "total_tokens": 576
+      },
+      "finish_reason": "length",
+      "outcome": "validation_error",
+      "elapsed_seconds": 1.740023487000144
+    }
+  ]
+}

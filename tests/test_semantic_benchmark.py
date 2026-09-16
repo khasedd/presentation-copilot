@@ -1,5 +1,9 @@
 """Behavioral checks for the POC-preserving model comparison."""
 import json
+import io
+from contextlib import redirect_stdout, redirect_stderr
+from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
@@ -60,6 +64,30 @@ class BenchmarkTests(unittest.TestCase):
         self.assertIsNone(bench.summarize(rows)[0]['completion_tokens'])
         with self.assertRaises(ValueError):
             bench.run_benchmark('test', repeats=0)
+
+    def test_cli_writes_report_and_returns_failure_for_failed_checks(self):
+        rows = bench.run_benchmark('test', models=('fake',), repeats=1,
+                                   request_fn=Mock(return_value=completion(poc.CASES[0].expected_statuses)))
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'results' / 'run.json'
+            with patch.object(poc, 'load_api_key', return_value='test'), \
+                    patch.object(bench, 'run_benchmark', return_value=rows), \
+                    redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                self.assertEqual(bench.main(['--output', str(output)]), 1)
+            report = json.loads(output.read_text())
+            self.assertEqual(len(report['records']), 4)
+            self.assertEqual(report['settings']['max_tokens'], 300)
+        with patch.object(poc, 'load_api_key', return_value=None), redirect_stderr(io.StringIO()):
+            self.assertEqual(bench.main([]), 2)
+            with self.assertRaises(SystemExit):
+                bench.main(['--repeats', '0'])
+
+    def test_original_poc_cli_still_evaluates_four_cases(self):
+        with patch.object(poc, 'load_api_key', return_value='test'), \
+                patch.object(poc, 'request_model', side_effect=[
+                    completion(c.expected_statuses)['choices'][0]['message']['content']
+                    for c in poc.CASES]), redirect_stdout(io.StringIO()):
+            self.assertEqual(poc.main(), 0)
 
     def test_request_settings_and_original_string_interface_unchanged(self):
         response = completion(poc.CASES[0].expected_statuses)
