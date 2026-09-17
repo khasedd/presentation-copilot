@@ -11,10 +11,11 @@ The project is being built for the **Nebius x NVIDIA Global AI Hackathon**, targ
 - [Operational rules for contributors and agents](AGENTS.md)
 - [Semantic-coverage proof of concept](experiments/README.md)
 - [Phase 1 stack discovery record](docs/phase-1-stack-discovery.md)
+- [Token Factory limits, pricing, billing, and operational constraints](docs/phase-1-token-factory-constraints.md)
 
 ## Status
 
-An isolated semantic-coverage proof of concept now verifies four controlled transcript cases through Nebius Token Factory and NVIDIA Nemotron 3 Super. It is not application architecture or a production-quality evaluation. A [Phase 1 benchmark](experiments/BENCHMARK.md) now compares all four available NVIDIA model IDs on the unchanged cases, with latency and token usage recorded. Super is the only model that passed all 12 attempts under the existing token cap. Broader stack discovery, representative quality evaluation, pricing verification, and presentation integration remain future work.
+An isolated semantic-coverage proof of concept now verifies four controlled transcript cases through Nebius Token Factory and NVIDIA Nemotron 3 Super. It is not application architecture or a production-quality evaluation. A [Phase 1 benchmark](experiments/BENCHMARK.md) now compares all four available NVIDIA model IDs on the unchanged cases, with latency and token usage recorded. Super is the only model that passed all 12 attempts under the existing token cap. The [September 17 documentation review](docs/phase-1-token-factory-constraints.md) records public pricing, quotas, context limits, billing rules, and operational risks. Account-specific limits and credit deductions, realistic load/quality evaluation, broader stack discovery, and presentation integration remain open.
 
 ## License
 
