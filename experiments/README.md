@@ -39,3 +39,7 @@ Case A used the paraphrase “which words are relevant to other words in the seq
 - The model returns only a binary decision; the experiment does not yet capture evidence spans, ambiguity, user corrections, or confidence.
 - The model call is synchronous and has a 30-second timeout; it has no retry, observability, streaming, or production failure policy.
 - Token Factory availability, exact model versions, pricing, and structured-output behavior must be reconfirmed as work continues.
+
+## Phase 1 comparison
+
+The [small four-model benchmark](BENCHMARK.md) reuses these exact cases and validation. Across 48 live requests, Super passed 12/12, Nano 11/12, Ultra 6/12, and Lightning 0/12 under the unchanged 300-token cap. Super remains the provisional choice; all failures hit the token limit. See the report for timings, token counts, reproduction, and limitations.
