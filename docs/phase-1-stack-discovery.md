@@ -148,4 +148,6 @@ This is the current workload choice, subject to broader evaluation; it is not a 
 
 ## Roadmap relationship
 
-This record adds evidence for authenticated access, successful inference, observed API failure behavior, and the current component decision. It supplements the [Phase 1 roadmap](../roadmap.md) and existing benchmark rather than declaring all of Phase 1 complete. The exit gate's cost/credit evidence is still outstanding, and the future timeout behavior above requires later state and control work.
+This record adds evidence for authenticated access, successful inference, observed API failure behavior, and the current component decision. It supplements the [Phase 1 roadmap](../roadmap.md) and existing benchmark rather than declaring all of Phase 1 complete. The future timeout behavior above requires later state and control work.
+
+**September 17 documentation follow-up:** [Token Factory operating constraints](phase-1-token-factory-constraints.md) now records official quota/billing rules, public prices and hosted context windows, API/privacy/availability constraints, and estimates using the benchmark's token totals. Earlier statements here about unverified pricing describe the original tests. Actual account credit deductions, exact quota allocation, context-boundary behavior, and realistic throughput remain unverified; the full Phase 1 exit gate remains open.
