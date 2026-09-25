@@ -42,4 +42,18 @@ python3 -m trace --count --summary --missing --coverdir /tmp/copilot-phase2-cove
 | `presentation.adapters.google_slides` | 98.6% |
 | `experiments.ingest_google_slides` | 96.9% |
 
-These are standard-library trace line measurements, not branch coverage or a claim of exhaustive correctness. No browser test applies to this CLI-only foundation. Remaining gaps include real OAuth/network access, source-checked representative ingestion, visual semantics, large realistic decks and full persistent identity. Live verification is explicitly pending owner-supplied presentation ID and local credentials; no live completion is claimed.
+These are standard-library trace line measurements, not branch coverage or a claim of exhaustive correctness. No browser test applies to this CLI-only foundation. Remaining gaps include visual semantics, large realistic decks, full persistent identity, group-inside-group live content and owner-approved live mutation/reorder testing.
+
+## Live baseline evidence — September 25, 2026
+
+The owner authorized read-only ingestion of an eight-slide fixture. `python3 presentation-output/verify_baseline.py` loaded only `GOOGLE_SLIDES_ACCESS_TOKEN` from the ignored local `.env` and invoked `python3 -m experiments.ingest_google_slides <owner-supplied-id> --output <ignored-baseline-path>`. An initial sandboxed attempt returned a sanitized transport error; the network-enabled attempt succeeded. The normalized snapshot was observed at `2026-09-25T19:45:08.593763+00:00`.
+
+- **189 independent field assertions passed** against a second read-only source response: presentation provenance, eight ordered slide IDs, direct text, notes, table dimensions/cell coordinates/spans/text, image provenance/alt text and group children.
+- Re-normalizing the captured source with the baseline observation timestamp reproduces the saved JSON exactly. Revision metadata was present and matched across the two source reads.
+- A 2×3 table retains six cells at `(0,0)` through `(1,2)`. Notes are nonempty on two slides. The sparse slide retains one element and empty notes.
+- The fixture has one group with two empty-text shape children. Child hierarchy/IDs are verified; no group-inside-group case exists in this live source.
+- Slides 7 and 8 have equal fingerprints but different source IDs. Baseline self-comparison produces eight unchanged source-ID matches and zero ambiguous matches. Content-only matching of the duplicate pair is non-unique; the earlier synthetic ambiguity regression remains the fallback-behavior evidence. No live mutation/reorder test was performed.
+- Exactly two expected extraction notices were emitted: normalized-subset limitations and unsupported raster-image semantics.
+- Snapshot/source/report files are ignored and mode `0600`. No source mutation occurred and no credential or raw live content is committed.
+
+The initial live-ingestion portion passes. The overall exit work remains open at the owner's explicit approval checkpoint before mutation/reorder testing.
