@@ -6,11 +6,12 @@ import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from datetime import datetime, timezone
+from http.client import IncompleteRead
 from pathlib import Path
 from unittest.mock import Mock, patch
 from urllib.error import HTTPError, URLError
 
-from presentation.adapters.google_slides import GoogleSlidesSource, normalize_presentation
+from presentation.adapters.google_slides import GoogleSlidesSource, _NoRedirect, normalize_presentation
 from presentation.source import PresentationSourceError
 from experiments.ingest_google_slides import main
 
@@ -58,6 +59,60 @@ class NormalizationTests(unittest.TestCase):
         self.assertEqual([e.text for e in elements], ["Display text", "1", ""])
         self.assertEqual(elements[2].kind, "unknown")
         self.assertEqual(elements[2].extraction_status, "unsupported")
+
+    def test_merged_table_cells_preserve_coordinates_and_spans(self):
+        table = self.payload["slides"][0]["pageElements"][2]["table"]
+        table["rows"] = 2
+        table["tableRows"] = [{"tableCells": [{
+            "location": {}, "rowSpan": 2, "columnSpan": 2,
+            "text": {"textElements": [{"textRun": {"content": "Merged\n"}}]},
+        }]}, {}]
+        element = normalize_presentation(self.payload, fetched_at=NOW).slides[0].elements[2]
+        cell = element.table_cells[0]
+        self.assertEqual((cell.row, cell.column, cell.row_span, cell.column_span), (0, 0, 2, 2))
+        self.assertEqual((element.table_rows, element.table_columns), (2, 2))
+        self.assertEqual(cell.text, "Merged\n")
+        for invalid in (0, -1, True, 3):
+            table["tableRows"][0]["tableCells"][0]["columnSpan"] = invalid
+            with self.subTest(span=invalid), self.assertRaises(PresentationSourceError):
+                normalize_presentation(self.payload, fetched_at=NOW)
+
+    def test_unknown_text_marks_group_partial_and_notes_unavailable(self):
+        first = self.payload["slides"][0]
+        first["pageElements"][1]["elementGroup"]["children"][0]["shape"]["text"]["textElements"].append({"futureText": {}})
+        first["slideProperties"]["notesPage"]["pageElements"][1]["shape"]["text"]["textElements"].append({"futureText": {}})
+        deck = normalize_presentation(self.payload, fetched_at=NOW)
+        self.assertEqual(deck.slides[0].elements[1].extraction_status, "partial")
+        self.assertEqual(deck.slides[0].speaker_notes.status, "unavailable")
+        self.assertEqual(deck.slides[0].speaker_notes.text, "Presenter-authored explanation.\n")
+        self.assertEqual(sum(i.code == "unsupported_text" for i in deck.issues), 2)
+
+    def test_whitespace_notes_and_missing_notes_reference_are_distinct(self):
+        page = self.payload["slides"][0]["slideProperties"]["notesPage"]
+        page["pageElements"][1]["shape"]["text"]["textElements"] = [{"textRun": {"content": "\n"}}]
+        notes = normalize_presentation(self.payload, fetched_at=NOW).slides[0].speaker_notes
+        self.assertEqual((notes.status, notes.text), ("empty", "\n"))
+        page.pop("notesProperties")
+        notes = normalize_presentation(self.payload, fetched_at=NOW).slides[0].speaker_notes
+        self.assertEqual(notes.status, "unavailable")
+
+    def test_table_holes_overlaps_and_multiple_variants_are_rejected(self):
+        for change in ("hole", "overlap", "variants", "huge", "missing_rows"):
+            payload = copy.deepcopy(self.payload)
+            element = payload["slides"][0]["pageElements"][2]
+            table = element["table"]
+            if change == "hole":
+                table["tableRows"][0]["tableCells"].pop()
+            elif change == "overlap":
+                table["tableRows"][0]["tableCells"][1]["location"]["columnIndex"] = 0
+            elif change == "variants":
+                element["shape"] = {}
+            elif change == "huge":
+                table["rows"] = 100001
+            else:
+                table["tableRows"] = []
+            with self.subTest(change=change), self.assertRaises(PresentationSourceError):
+                normalize_presentation(payload, fetched_at=NOW)
 
     def test_malformed_payloads_fail_instead_of_silently_losing_content(self):
         cases = [None, [], {}, {"presentationId": "x", "slides": "bad"},
@@ -117,6 +172,28 @@ class TransportTests(unittest.TestCase):
             source, _ = self.source(body)
             with self.assertRaises(PresentationSourceError):
                 source.ingest("synthetic_deck")
+
+    def test_interrupted_body_is_a_sanitized_transport_failure(self):
+        source, opener = self.source()
+        response = Mock()
+        response.__enter__ = Mock(return_value=response)
+        response.__exit__ = Mock(return_value=False)
+        response.read.side_effect = IncompleteRead(b"private source content", 100)
+        opener.return_value = response
+        with self.assertRaises(PresentationSourceError) as ctx:
+            source.ingest("synthetic_deck")
+        self.assertEqual(ctx.exception.code, "transport")
+        self.assertNotIn("private source", str(ctx.exception))
+
+    def test_oversized_body_and_redirect_are_refused(self):
+        source, opener = self.source(b"12345")
+        with patch("presentation.adapters.google_slides.MAX_RESPONSE_BYTES", 4):
+            with self.assertRaises(PresentationSourceError):
+                source.ingest("synthetic_deck")
+        request = opener.call_args.args[0]
+        with self.assertRaises(HTTPError) as ctx:
+            _NoRedirect().redirect_request(request, None, 302, "redirect", {}, "https://untrusted.example")
+        ctx.exception.close()
 
     def test_cli_writes_normalized_json_without_printing_content_or_token(self):
         with tempfile.TemporaryDirectory() as directory:
