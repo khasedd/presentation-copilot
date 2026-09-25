@@ -2,9 +2,9 @@
 
 Reviewed **September 17, 2026** against official Nebius documentation and the public Token Factory model/endpoint UI. This is the project's dated reference for inference limits, costs, and operational dependencies. Recheck it before changing models, sizing live workloads, deploying, and demonstrating the project.
 
-**Decision:** retain Token Factory + NVIDIA Super for isolated coverage experiments. The documentation review is complete; account capacity, actual credit deductions, and live reliability are not verified. No finite documentation review can establish zero future bottlenecks. The acceptance checks below make those risks explicit before integration depends on them.
+**Decision:** retain Token Factory + NVIDIA Super for isolated coverage experiments. The documentation review is complete, and the initial Phase 1 stack-discovery gate is closed by the repository's account-visible billing evidence; account capacity, exact credit reconciliation, and live reliability are not verified. No finite documentation review can establish zero future bottlenecks. The acceptance checks below make those risks explicit before integration depends on them.
 
-Evidence labels used here: **documented** means a provider statement; **observed** means existing repository measurements or public UI inspected on the review date; **estimate** means arithmetic using those inputs; **required check** means unfinished work. No billable inference, billing changes, load tests, or infrastructure deployments were performed for this review. The pricing page required login in the available browser; public model cards were readable. No private account values are recorded.
+Evidence labels used here: **documented** means a provider statement; **observed** means existing repository measurements or public UI inspected on the review date; **estimate** means arithmetic using those inputs; **required check** means unfinished work. No additional billable inference, billing changes, load tests, or infrastructure deployments were performed for this documentation review. The pricing page required login in the available browser; public model cards were readable. No private account values are recorded.
 
 ## 1. Quotas and rate limits
 
@@ -46,7 +46,9 @@ Usage debits the balance in real time. Card billing occurs when the configured t
 
 Promo codes have redemption expiry conditions and cannot settle outstanding invoices. Confirm applied credit in Transactions. Review organization Usage with project/service/product/region filters for reconciliation. Taxes depend on billing location; the table's estimates exclude them.
 
-**Required account evidence:** remaining promotional and paid balances, grant expiry after redemption, eligible services/models, charging threshold, effective prices, tax treatment, credit-consumption order, and whether any enforceable spending ceiling exists. Never assume Token Factory credits cover AI Cloud GPUs or dedicated endpoints.
+**Observed account billing evidence:** the settled [Token Factory Usage dashboard screenshot](evidence/phase-1/nebius-token-factory-billing.png) shows **$0.02 total** for the recorded activity. It lists input and output usage for Nemotron Ultra, Lightning, Nano, and Super in `eu-north1`; Super input and output are each displayed as `< 0.01M` tokens and `< $0.01`. This is actual observed dashboard billing evidence, not a retrospective estimate. The screenshot does not expose the exact underlying quantities, account balance, or credit-consumption order.
+
+**Remaining account follow-up:** remaining promotional and paid balances, grant expiry after redemption, eligible services/models, charging threshold, tax treatment, credit-consumption order, and whether any enforceable spending ceiling exists. Never assume Token Factory credits cover AI Cloud GPUs or dedicated endpoints. These items do not block the Phase 1 exit gate; they remain relevant before budgeting or production use.
 
 The [official hackathon rules](https://nebiusglobalaihackathon.devpost.com/rules) offer Builder Program credits but do not establish our award amount or expiry. They require runtime Nebius use plus an NVIDIA open-source model; separate Cloud hosting is not mandatory for the current track. Test access must remain available through judging, currently ending **December 15, 2026, 12:00 PM Pacific**. Budget beyond the October submission deadline. No new provider or model is selected by this review.
 
@@ -70,7 +72,7 @@ Using recorded [benchmark usage](../experiments/BENCHMARK.md), including unsucce
 | Super | 3,069 | 2,579 | $0.0032418 | 12 |
 | Ultra | 3,069 | 3,345 | $0.013104 | 6 |
 
-Super averaged 255.75 input and 214.9167 completion tokens, approximately **$0.00027015 per attempt**. The owner's separate 26-input/58-completion smoke request would cost approximately **$0.00006** at these prices. Neither calculation verifies the account's actual deductions. Truncated but processed generations still belong in the usage estimate; timeout/disconnect and error billing remain unresolved.
+Super averaged 255.75 input and 214.9167 completion tokens, approximately **$0.00027015 per attempt**. The owner's separate 26-input/58-completion smoke request would cost approximately **$0.00006** at these prices. These are retrospective per-request estimates and do not replace the settled dashboard total; the screenshot does not reconcile the total to individual requests. Truncated but processed generations still belong in the usage estimate; timeout/disconnect and error billing remain unresolved.
 
 ### Sizing examples — estimates, not accepted cadence or capacity
 
@@ -166,7 +168,7 @@ These are evidence requirements, not extra infrastructure commitments. The proje
 | Open item | Evidence needed to close | Blocks |
 | --- | --- | --- |
 | Account capacity | Sanitized Rate Limits values plus successful-request headers; quota scope, token accounting, burst/concurrency semantics confirmed | Supported presenter count/cadence |
-| Credits and effective billing | Sanitized amount/expiry/eligible-service facts, actual rates, threshold/cap policy; isolated synthetic usage reconciled with Usage/Transactions after settlement | Credit runway and Phase 1 cost gate |
+| Credits and effective billing | Sanitized amount/expiry/eligible-service facts, actual rates, threshold/cap policy; isolated synthetic usage reconciled with Usage/Transactions after settlement. The settled dashboard already records $0.02 for the observed activity. | Credit runway and spending policy before budgeting or production use |
 | Model context/output | Exact endpoint ceilings, tokenization, below/at/over-boundary results, truncation behavior, reasoning/schema compatibility | Safe prompt sizes and extraction workloads |
 | Live workload envelope | Agreed maximum presenters, session length, cadence, p95/p99 usable-result deadline, error tolerance, and spend budget; realistic replay with retries and competing jobs | Any no-bottleneck readiness claim |
 | Realistic capacity trial | Cold/idle start, sustained expected load, bounded bursts and soak; latency percentiles, quota headroom, valid results, costs, and recovery | Integrated live sessions |
@@ -177,4 +179,4 @@ These are evidence requirements, not extra infrastructure commitments. The proje
 
 For a first sizing experiment, reserve **30% quota headroom** as a project planning assumption, then revise from measured bursts. Define acceptance targets before the trial; the current benchmark does not supply production targets. If public inference cannot meet them, resolve cadence/workload size or confirmed hosting capacity before integration. No untested model fallback may silently change coverage judgments.
 
-**Verification of this record:** official pages and four public model detail cards were read, prices/context/routing keys compared, cost arithmetic recomputed from the committed benchmark totals, and repository cross-links checked. Documentation contradictions and account-only unknowns are deliberately retained. This completes the public-documentation research portion of Phase 1, not its full exit gate.
+**Verification of this record:** official pages and four public model detail cards were read, prices/context/routing keys compared, cost arithmetic recomputed from the committed benchmark totals, repository cross-links checked, and the settled Usage dashboard screenshot inspected. The $0.02 total is recorded as actual observed billing evidence. Documentation contradictions and account-only unknowns are deliberately retained. The Phase 1 stack-discovery exit gate is complete; the checklist above remains follow-up evidence for integrated live sessions, budgeting, privacy commitments, and production-readiness claims.

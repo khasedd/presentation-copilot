@@ -140,14 +140,26 @@ Rationale:
 - Super achieved 12/12 correct, valid results in the existing benchmark; Nano achieved 11/12 and the other candidates scored lower.
 - Its semantic-coverage mean latency was 1.370 seconds.
 - Its aggregate completion-token usage was the lowest of the tested models: 2,579 across 12 attempts.
-- Observed usable correctness takes priority over a modest token-cost difference. The owner accepts a potentially higher token price in exchange for that correctness. This is a decision preference, not a verified price comparison: current dollar rates, credit deductions, and total monetary cost were not established by these tests.
+- Observed usable correctness takes priority over a modest token-cost difference. The owner accepts a potentially higher token price in exchange for that correctness. This is a decision preference; the settled billing evidence below records the observed account total for the comparison and inference checks.
 
 **Do not add extra Nebius deployment infrastructure solely for semantic coverage yet.** Token Factory already supplies the hosted inference path needed by the current workload. Nebius performs the actual inference hosting and NVIDIA Super performs the actual semantic judgments, so both are substantive parts of this path. No additional service or deployment dependency is selected by this record.
 
-This is the current workload choice, subject to broader evaluation; it is not a production-readiness claim. Representative speech, ambiguity, corrections, false-coverage rates, concurrency/throughput, context limits, quotas, and pricing/credit consumption remain to be investigated. Additional Nebius infrastructure may be considered when another demonstrated requirement calls for it.
+This is the current workload choice, subject to broader evaluation; it is not a production-readiness claim. Representative speech, ambiguity, corrections, false-coverage rates, concurrency/throughput, context limits, quotas, privacy/retention, and broader infrastructure options remain follow-up work. Additional Nebius infrastructure may be considered when another demonstrated requirement calls for it.
+
+## 9. Final billing evidence and Phase 1 closeout
+
+The repository includes the owner's [Token Factory billing screenshot](evidence/phase-1/nebius-token-factory-billing.png). The capture shows:
+
+- **$0.02 total** in the Token Factory billing view, with the dashboard reporting `Last updated: 15:00, UTC`.
+- Input and output usage for all four tested Nemotron model families—Ultra, Lightning, Nano, and Super—in region `eu-north1`.
+- Each displayed usage value is `< 0.01` million tokens; each displayed line item is `< $0.01` or `$0.01`.
+
+This is account-specific billing evidence that the Phase 1 model comparison and inference checks produced a small, visible Token Factory charge and that the observed work was billed through the intended Nebius path. The capture date, exact underlying token quantities, account credit balance, quota allocation, context boundary, and concurrency envelope are not visible and remain unverified.
+
+**Phase 1 status: complete for the initial stack-discovery gate.** The repository now contains repeatable benchmark evidence, authenticated-access and failure evidence, official operating-constraint research, and account-specific billing evidence sufficient to justify the next workload experiment: retain Nebius Token Factory with `nvidia/nemotron-3-super-120b-a12b` for semantic coverage. The limitations above remain follow-up work and are not production-readiness claims.
 
 ## Roadmap relationship
 
-This record adds evidence for authenticated access, successful inference, observed API failure behavior, and the current component decision. It supplements the [Phase 1 roadmap](../roadmap.md) and existing benchmark rather than declaring all of Phase 1 complete. The future timeout behavior above requires later state and control work.
+This record adds evidence for authenticated access, successful inference, observed API failure behavior, billing, and the current component decision. It closes the initial [Phase 1 roadmap](../roadmap.md) stack-discovery gate; later capacity, context, privacy, realistic workload, and infrastructure investigations remain follow-up work that must be completed before production or integrated live-session claims. The future timeout behavior above requires later state and control work.
 
-**September 17 documentation follow-up:** [Token Factory operating constraints](phase-1-token-factory-constraints.md) now records official quota/billing rules, public prices and hosted context windows, API/privacy/availability constraints, and estimates using the benchmark's token totals. Earlier statements here about unverified pricing describe the original tests. Actual account credit deductions, exact quota allocation, context-boundary behavior, and realistic throughput remain unverified; the full Phase 1 exit gate remains open.
+**September 17 documentation follow-up:** [Token Factory operating constraints](phase-1-token-factory-constraints.md) records official quota/billing rules, public prices and hosted context windows, API/privacy/availability constraints, and estimates using the benchmark's token totals. The settled billing screenshot supplies account-specific evidence for the observed charge; exact quota allocation, context-boundary behavior, realistic throughput, privacy/retention settings, and broader infrastructure comparisons remain unverified follow-up checks.
