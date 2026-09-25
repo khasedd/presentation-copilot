@@ -1,0 +1,55 @@
+{
+  "presentationId": "synthetic_deck",
+  "title": "Representation fixture",
+  "revisionId": "opaque-revision-A",
+  "slides": [
+    {
+      "objectId": "slide_intro",
+      "pageElements": [
+        {"objectId": "title_intro", "shape": {"text": {"textElements": [
+          {"paragraphMarker": {}},
+          {"textRun": {"content": "Hello "}},
+          {"textRun": {"content": "世界\nSecond paragraph\n"}}
+        ]}}},
+        {"objectId": "group_intro", "elementGroup": {"children": [
+          {"objectId": "nested_text", "shape": {"text": {"textElements": [
+            {"textRun": {"content": "Nested content\n"}}
+          ]}}}
+        ]}},
+        {"objectId": "table_intro", "table": {"rows": 1, "columns": 2, "tableRows": [
+          {"tableCells": [
+            {"location": {"rowIndex": 0, "columnIndex": 0}, "rowSpan": 1, "columnSpan": 1,
+             "text": {"textElements": [{"textRun": {"content": "Left\n"}}]}},
+            {"location": {"rowIndex": 0, "columnIndex": 1}, "rowSpan": 1, "columnSpan": 1,
+             "text": {"textElements": [{"textRun": {"content": "Right\n"}}]}}
+          ]}
+        ]}}
+      ],
+      "slideProperties": {"notesPage": {
+        "objectId": "notes_intro",
+        "notesProperties": {"speakerNotesObjectId": "speaker_intro"},
+        "pageElements": [
+          {"objectId": "notes_decoration", "shape": {"text": {"textElements": [
+            {"textRun": {"content": "DO NOT INGEST THIS AS NOTES\n"}}
+          ]}}},
+          {"objectId": "speaker_intro", "shape": {"text": {"textElements": [
+            {"textRun": {"content": "Presenter-authored explanation.\n"}}
+          ]}}}
+        ]
+      }}
+    },
+    {
+      "objectId": "slide_visual",
+      "pageElements": [
+        {"objectId": "image_visual", "title": "Architecture", "description": "Three connected services", "image": {}},
+        {"objectId": "chart_visual", "sheetsChart": {}}
+      ],
+      "slideProperties": {"notesPage": {
+        "objectId": "notes_visual",
+        "notesProperties": {"speakerNotesObjectId": "speaker_visual"},
+        "pageElements": []
+      }}
+    },
+    {"objectId": "slide_empty"}
+  ]
+}
