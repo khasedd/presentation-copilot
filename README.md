@@ -18,7 +18,7 @@ The project is being built for the **Nebius x NVIDIA Global AI Hackathon**, targ
 
 An isolated semantic-coverage proof of concept now verifies four controlled transcript cases through Nebius Token Factory and NVIDIA Nemotron 3 Super. It is not application architecture or a production-quality evaluation. A [Phase 1 benchmark](experiments/BENCHMARK.md) now compares all four available NVIDIA model IDs on the unchanged cases, with latency and token usage recorded. Super is the only model that passed all 12 attempts under the existing token cap. The [September 17 documentation review](docs/phase-1-token-factory-constraints.md) records public pricing, quotas, context limits, billing rules, and operational risks. Account-specific limits and credit deductions, realistic load/quality evaluation, broader stack discovery, and presentation integration remain open.
 
-Phase 2 now provides schema 1.0 snapshots, a read-only Google Slides adapter, explicit extraction limitations, and deterministic reorder/change comparison. All 41 offline tests pass. Live ingestion and source verification remain pending the owner's test deck and local OAuth token; Phase 2 is not complete. Concept generation, UI and live presentation control are not part of this foundation.
+Phase 2 now provides schema 1.0 snapshots, a read-only Google Slides adapter, explicit extraction limitations, and deterministic reorder/change comparison. All 41 offline tests pass. Baseline live ingestion of an owner-controlled eight-slide deck passed 189 source-field checks. Live mutation/reorder testing awaits owner approval; Phase 2 is not complete. Concept generation, UI and live presentation control are not part of this foundation.
 
 ## Google Slides prototype
 
