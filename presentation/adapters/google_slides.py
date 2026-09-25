@@ -5,6 +5,7 @@ import json
 import re
 from collections.abc import Callable, Mapping
 from datetime import datetime, timezone
+from http.client import HTTPException
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -214,7 +215,7 @@ def normalize_presentation(payload: Mapping[str, object], *, fetched_at: datetim
             SourceRevision(_optional_string(payload.get("revisionId")), fetched_at),
             tuple(slides), tuple(normalizer.issues),
         ))
-    except (ValueError, TypeError, RecursionError) as error:
+    except (ValueError, TypeError, RecursionError):
         raise PresentationSourceError("malformed_source", "Presentation response does not match the supported schema.") from None
 
 
@@ -249,7 +250,7 @@ class GoogleSlidesSource:
             code = "authentication" if error.code == 401 else "access" if error.code in (403, 404) else "transport"
             error.close()
             raise PresentationSourceError(code, "Google Slides request failed; check access or retry later.") from None
-        except (URLError, OSError):
+        except (URLError, OSError, HTTPException):
             raise PresentationSourceError("transport", "Google Slides request did not complete.") from None
         except (ValueError, UnicodeError, RecursionError):
             raise PresentationSourceError("malformed_source", "Google Slides returned invalid JSON.") from None
