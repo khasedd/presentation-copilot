@@ -22,3 +22,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.log
+
+# Private presentation snapshots and raw live-check artifacts
+presentation-output/

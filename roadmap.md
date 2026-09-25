@@ -34,17 +34,19 @@ Stack discovery may continue alongside later engineering; broader comparisons an
 ## Phase 2 — Presentation representation
 
 - [ ] Investigate permitted presentation ingestion paths and supported source formats.
-- [ ] Select and document the first supported source/format only after comparing realistic ingestion options, access requirements, and technical/legal suitability.
-- [ ] Establish a source adapter boundary that maps provider content into the internal model without permanently coupling application logic to one provider.
+- [x] Selected Google Slides as the first supported source per the owner decision, with PPTX retained as a future adapter and PDF deferred. Compared structural/note/revision access and recorded OAuth prerequisites, official API terms/data-use constraints and hackathon compatibility in the [Phase 2 design](docs/phase-2-presentation-representation.md). This selection does not establish public OAuth readiness or live presentation control.
+- [x] Established `PresentationSource.ingest(...) -> Deck` with a Google Slides REST adapter and a pure normalizer. Provider dictionaries stay inside the adapter; downstream representation/comparison uses only the internal model. Verified through deterministic and mocked transport/CLI tests.
 - [ ] Prototype extraction of slide text, structure, speaker notes, and meaningful concepts for representative decks.
-- [ ] Define the first versioned internal representation for decks, slides, slide elements/content, speaker notes, and meaningful concepts, including provenance, confidence where applicable, and source revision/version information.
-- [ ] Preserve stable identifiers, slide order, text/structure, and source provenance where available; document missing information and normalization limits.
+- [x] Defined schema 1.0 for decks, slides, normalized elements/groups/tables, speaker notes, provenance and source revisions. `SourceRevision` contains only optional `revision_id` and `fetched_at`. A concept shape is reserved; ingestion explicitly emits `not_extracted` with no generated concepts or invented confidence. Verified serialization, references, schema and fingerprint invariants.
+- [x] Preserved source presentation/page/object identifiers as provenance, ordered slides, direct text/structure and notes. Internal IDs are snapshot-local; Google IDs are not permanent identities. Explicit issues document unsupported visuals, inherited content and normalization limits. Verified with synthetic fixtures; live source verification remains below.
 - [ ] Ingest at least one representative presentation through the adapter into the internal model and verify the result against its source.
-- [ ] Define expected behavior for reordered slides and changed source content, including identity matching and when derived concepts or coverage must be invalidated.
-- [ ] Add deterministic parsing/normalization and representation tests, including revision and reorder cases.
+- [x] Implemented deterministic snapshot comparison: retained source IDs first, then unique substantive-content fingerprints among unmatched slides; duplicates remain ambiguous. Relative-order changes are separate from insertion/deletion position shifts. Content/notes changes invalidate concept reuse, source-reference changes require rebinding, incomplete extraction requires review, and no live coverage carryover is authorized. Full persistent/fuzzy identity is deferred. Behavior is documented and tested.
+- [x] Added 30 deterministic tests for representation, normalization, snapshot comparison, malformed input, API failures and CLI output. All 41 repository tests pass. Tests cover optional/changed revision tokens, reorder, notes edits, replacement IDs, duplicate ambiguity and merged tables. See [test evidence](docs/testing/presentation-representation.tdd.md); these are offline results, not live ingestion evidence.
 - [ ] Evaluate edge cases: sparse slides, diagrams/images/charts, repeated concepts, reordered slides, and presenter-authored notes; document supported handling and explicit limitations.
 
 **Exit gate:** One representative deck is ingested through the selected adapter into the versioned model, with source-checked content, notes, identifiers, order, and provenance. Deterministic tests verify normalization and the documented change/reorder behavior; unsupported content is identified explicitly.
+
+**Current status — pending:** The foundation is verified offline. The owner has requested the live ingestion/source check as part of this exit work; the test presentation ID and locally configured OAuth token are still required. The representative-deck item and exit gate remain open. Concept extraction and broader representative edge-case evaluation are not complete.
 
 ## Phase 3 — Speech capture and transcription
 
