@@ -10,11 +10,11 @@ from transcription.model import (
 )
 
 
-def event(payload, sequence=0, observed_at_ms=0, **changes):
+def event(initial_payload, sequence=0, observed_at_ms=0, **changes):
     values = dict(schema_version="1.0", session_id="session-a", stream_id="stream-a",
                   sequence=sequence, observed_at_ms=observed_at_ms,
                   provenance=Provenance("synthetic", "replay", "fixture-a", None),
-                  payload=payload)
+                  payload=initial_payload)
     values.update(changes)
     return TranscriptEvent(**values)
 
