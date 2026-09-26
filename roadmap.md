@@ -47,7 +47,7 @@ Stack discovery may continue alongside later engineering; broader comparisons an
 
 **Exit gate — PASSED:** An owner-controlled representative deck was ingested through the Google Slides adapter into schema 1.0, with source-checked content, notes, identifiers, order and provenance. The baseline passed 189 field checks; a second live snapshot verified the approved reorder, edits, addition/removal and replacement-ID case. All 41 deterministic tests pass, and duplicate fallback ambiguity was verified separately in memory while preserving the live pair. Unsupported content is identified explicitly. This gate establishes the bounded representation foundation, not completion of every Phase 2 item.
 
-**Remaining work and review:** The live source has one group with two child shapes, not a group-inside-group case. Concept extraction, broader representative edge-case evaluation, other source adapters and full persistent identity remain unfinished. No Phase 3+ implementation was added. PR #4 remains unmerged for owner review.
+**Remaining work and review:** The live source has one group with two child shapes, not a group-inside-group case. Concept extraction, broader representative edge-case evaluation, other source adapters and full persistent identity remain unfinished. No Phase 3+ implementation was added. The owner approved this verified foundation for integration through PR #4.
 
 ## Phase 3 — Speech capture and transcription
 
