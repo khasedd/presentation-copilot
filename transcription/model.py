@@ -202,8 +202,10 @@ def event_from_dict(data: object) -> TranscriptEvent:
     if model is StreamStarted and args["started_at"] is not None:
         timestamp = args["started_at"]
         _require(isinstance(timestamp, str) and re.fullmatch(
-            r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})",
+            r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)",
             timestamp) is not None, "started_at must be an aware RFC 3339 timestamp")
+        # Unknown offsets cannot establish the absolute instant this field represents.
+        _require(not timestamp.endswith("-00:00"), "started_at must have a known UTC offset")
         try:
             args["started_at"] = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
         except ValueError:
