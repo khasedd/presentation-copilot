@@ -110,6 +110,17 @@ class TranscriptStreamTests(unittest.TestCase):
         for payload in (StreamStarted(), StreamEnded("completed"), segment(revision=2)):
             self.assert_rejected_unchanged(event(payload, 3, 100))
 
+    def test_segments_do_not_implicitly_recover_missing_status(self):
+        self.stream.apply(event(StreamStatusChanged("missing"), 1, 100))
+        state = self.stream.apply(event(segment(start_ms=None, end_ms=None), 2, 100))
+        self.assertEqual(state.status, "missing")
+        ended = self.stream.apply(event(StreamEnded("completed"), 3, 100))
+        self.assertEqual(ended.status, "missing")
+        self.assertEqual(ended.segments[0].status, "partial")
+
+    def test_invalid_object_cannot_mutate_state(self):
+        self.assert_rejected_unchanged({"payload": "private"})
+
     def test_direct_failure_and_cancelled_empty_stream(self):
         for reason in ("failed", "cancelled"):
             stream = TranscriptAccumulator()
@@ -167,6 +178,23 @@ class ReplayTests(unittest.TestCase):
         events[1], events[2] = events[2], events[1]
         with self.assertRaises(TranscriptValidationError):
             tuple(replay(events))
+
+    def test_replay_failure_boundary_and_trailing_event(self):
+        events = [event(StreamStarted()), event(StreamStatusChanged("failed"), 1),
+                  event(StreamEnded("failed"), 2)]
+        self.assertEqual(tuple(replay(events))[-1].end_reason, "failed")
+        with self.assertRaises(TranscriptValidationError):
+            tuple(replay(events + [event(StreamStatusChanged("ready"), 3)]))
+
+    def test_loader_rejects_non_utf8_and_propagates_missing_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "fixture.json"
+            with self.assertRaises(FileNotFoundError):
+                tuple(load_replay(path))
+            path.write_bytes(b"\xffprivate")
+            with self.assertRaises(TranscriptValidationError) as caught:
+                tuple(load_replay(path))
+            self.assertNotIn("private", str(caught.exception))
 
     def test_loader_rejects_invalid_json_shape_and_event_without_content_in_error(self):
         for raw in ("private{", "{}", "[null]", "[NaN]", '[{"x":1,"x":2}]'):

@@ -63,6 +63,21 @@ class TranscriptModelTests(unittest.TestCase):
         self.assertIn("2026-09-25T20:30:00.000000Z", event_to_json(
             event_from_json(json.dumps(doc))))
 
+    def test_invalid_calendar_dates_offsets_and_unknown_offset_are_rejected(self):
+        doc = json.loads(event_to_json(event(StreamStarted())))
+        for timestamp in ("2026-02-30T00:00:00Z", "2026-09-25T00:00:00+00:60",
+                          "2026-09-25T00:00:00+24:00", "2026-09-25T00:00:00-00:00",
+                          "2026-09-25T00:00:00.1234567Z"):
+            doc["payload"]["started_at"] = timestamp
+            with self.subTest(timestamp=timestamp), self.assertRaises(TranscriptValidationError):
+                event_from_json(json.dumps(doc))
+
+    def test_datetime_outside_utc_range_and_non_datetime_are_rejected(self):
+        for value in ("private-value", datetime.min.replace(
+                tzinfo=timezone(timedelta(hours=1)))):
+            with self.subTest(value=value), self.assertRaises(TranscriptValidationError):
+                StreamStarted(value)
+
     def test_envelope_and_provenance_validation(self):
         bad = ({"schema_version": "2"}, {"session_id": " "}, {"stream_id": 1},
                {"sequence": True}, {"sequence": -1}, {"observed_at_ms": 0.5},
