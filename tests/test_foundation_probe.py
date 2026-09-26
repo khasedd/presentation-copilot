@@ -1,11 +1,14 @@
 """Bounded live-discovery transport and representative experiment contracts."""
 import io
 import json
+import tempfile
 import unittest
-from unittest.mock import Mock
+from contextlib import redirect_stdout, redirect_stderr
+from pathlib import Path
+from unittest.mock import Mock, patch
 from urllib.error import HTTPError
 
-from experiments.foundation_probe import request_chat, evaluate, CASES, make_deck
+from experiments.foundation_probe import request_chat, evaluate, CASES, make_deck, main
 
 
 class FoundationProbeTests(unittest.TestCase):
@@ -73,6 +76,48 @@ class FoundationProbeTests(unittest.TestCase):
         self.assertTrue(evaluate('coverage', json.dumps({'concepts': [
             {'id': 1, 'status': 'covered'}, {'id': 2, 'status': 'covered'},
             {'id': 3, 'status': 'not_covered'}], 'slide_complete': False}), case, d))
+
+    def test_cli_records_failures_privately_and_never_overwrites(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'report.json'
+            with patch('experiments.foundation_probe.load_api_key', return_value='synthetic-key'), \
+                 patch('experiments.foundation_probe.request_chat', side_effect=lambda *a: {
+                     'usable': False, 'error': 'transport_failure', 'usage': {}, 'seconds': 1}), \
+                 redirect_stdout(io.StringIO()):
+                self.assertEqual(main(['--output', str(output), '--rounds', '1']), 1)
+                saved = output.read_bytes()
+                self.assertEqual(output.stat().st_mode & 0o777, 0o600)
+                self.assertEqual(len(json.loads(saved)['records']), 27)
+                self.assertNotIn(b'synthetic-key', saved)
+                with self.assertRaises(FileExistsError):
+                    main(['--output', str(output), '--rounds', '1'])
+                self.assertEqual(output.read_bytes(), saved)
+
+    def test_cli_all_correct_records_pass_and_missing_key_fails_before_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'report.json'
+            with patch('experiments.foundation_probe.load_api_key', return_value=None), redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit):
+                    main(['--output', str(output)])
+            self.assertFalse(output.exists())
+            with patch('experiments.foundation_probe.load_api_key', return_value='synthetic-key'), \
+                 patch('experiments.foundation_probe.request_chat', side_effect=lambda *a: {'usable': True, 'content': '{}'}), \
+                 patch('experiments.foundation_probe.evaluate', return_value=True), redirect_stdout(io.StringIO()):
+                self.assertEqual(main(['--output', str(output), '--rounds', '1']), 0)
+
+    def test_request_resource_bounds_and_non_json_body(self):
+        opener = Mock()
+        for cap in [0, True, 4097]:
+            with self.assertRaises(ValueError):
+                request_chat([], 'key', 'model', opener=opener, max_tokens=cap)
+        with self.assertRaises(ValueError):
+            request_chat([{'role': 'user', 'content': 'a' * 80_000}], 'key', 'model', opener=opener)
+        opener.assert_not_called()
+        for raw in [b'not json', b'a' * 1_048_577]:
+            response = io.BytesIO(raw)
+            response.headers = {}
+            result = request_chat([], 'key', 'model', opener=Mock(return_value=response))
+            self.assertFalse(result['usable'])
 
 
 if __name__ == '__main__':
