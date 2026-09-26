@@ -53,10 +53,12 @@ Stack discovery may continue alongside later engineering; broader comparisons an
 
 - [ ] Investigate audio-capture permissions, device selection, privacy expectations, and allowed transcription components.
 - [ ] Prototype streaming transcription and measure delay, accuracy, partial-result stability, and failure behavior in realistic presentation conditions.
-- [ ] Define a transcript representation covering partial versus final segments, timestamps, ordering, corrections/revisions, and speaker/session boundaries, with explicit degraded behavior for delayed, missing, or failed transcription.
-- [ ] Provide a deterministic mock/replay transcript input path using the same representation so downstream coverage and state work can proceed without live microphone input.
+- [x] Define a transcript representation covering partial versus final segments, timestamps, ordering, corrections/revisions, and speaker/session boundaries, with explicit degraded behavior for delayed, missing, or failed transcription. Implemented independently versioned schema 1.0 events and a transcript-only accumulator, with adapter-owned internal sequence/revision counters, canonical UTC start timestamps, atomic transition rejection, and explicit availability/failure history. Verified offline; see the [Phase 3 contract](docs/phase-3-speech-transcription.md).
+- [x] Provide a deterministic mock/replay transcript input path using the same representation so downstream coverage and state work can proceed without live microphone input. The ten-event synthetic fixture verifies partial/final corrections, ordering, boundaries and degradation through the same accumulator. All 74 repository tests pass (41 existing, 33 new); see [test evidence](docs/testing/transcript-replay.tdd.md). No downstream coverage integration was added.
 
 **Exit gate:** A realistic live transcription trial records delay, accuracy, partial-result stability, and failure behavior. A deterministic replay verifies segment ordering, revisions, boundaries, and degraded behavior through the same downstream input contract. Document the investigated transcription choice and trial limitations.
+
+**First-slice status:** The contract and deterministic replay are verified offline. The Phase 3 exit gate remains incomplete: capture/privacy investigation, transcription selection, streaming implementation and realistic live trials remain outstanding. No live provider is selected, and synthetic replay timing is not measured transcription latency.
 
 ## Phase 4 — Semantic slide coverage
 
