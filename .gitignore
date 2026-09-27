@@ -25,3 +25,6 @@ Thumbs.db
 
 # Private presentation snapshots and raw live-check artifacts
 presentation-output/
+
+# Private account billing evidence; exclude from future commits
+/docs/evidence/phase-1/nebius-token-factory-billing.png

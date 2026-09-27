@@ -1,0 +1,1141 @@
+{
+  "observed_at": "2026-09-26T19:39:45.019062+00:00",
+  "synthetic_only": true,
+  "max_tokens": 1024,
+  "rounds": 2,
+  "records": [
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 529,
+        "prompt_tokens": 287,
+        "total_tokens": 816
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\n      \"ref\": \"slide/0/element/0\",\n      \"text\": \"A stale model result must not advance the slide.\"\n    },\n    {\n      \"ref\": \"slide/0/element/1/element/0/element/0\",\n      \"text\": \"Manual slide changes invalidate pending coverage judgments.\"\n    },\n    {\n      \"ref\": \"slide/0/notes\",\n      \"text\": \"Pause here.\\nOn network failure the presenter retains manual control.\"\n    }\n  ]\n}",
+      "seconds": 4.308734,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "extraction",
+      "case": "engineering",
+      "round": 1,
+      "correct": false
+    },
+    {
+      "usable": false,
+      "usage": {
+        "completion_tokens": 1024,
+        "prompt_tokens": 292,
+        "total_tokens": 1316
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "length",
+      "seconds": 6.395144,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "extraction",
+      "case": "business",
+      "round": 1,
+      "correct": false
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 859,
+        "prompt_tokens": 284,
+        "total_tokens": 1143
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\n      \"ref\": \"slide/0/element/0\",\n      \"text\": \"Correlation alone does not establish causation.\"\n    },\n    {\n      \"ref\": \"slide/0/element/1/element/0/element/0\",\n      \"text\": \"A confounder can influence both observed variables.\"\n    },\n    {\n      \"ref\": \"slide/0/notes\",\n      \"text\": \"Random assignment helps reduce confounding.\"\n    }\n  ]\n}",
+      "seconds": 4.857053,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "extraction",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 370,
+        "prompt_tokens": 1233,
+        "total_tokens": 1603
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 2.376198,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "coverage",
+      "case": "engineering",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 653,
+        "prompt_tokens": 1237,
+        "total_tokens": 1890
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"not_covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 3.765393,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "coverage",
+      "case": "business",
+      "round": 1,
+      "correct": false
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 275,
+        "prompt_tokens": 1227,
+        "total_tokens": 1502
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 2.20329,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "coverage",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 87,
+        "prompt_tokens": 103,
+        "total_tokens": 190
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"reminder\": \"On network failure the presenter retains manual control.\"\n}",
+      "seconds": 0.948341,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "guidance",
+      "case": "engineering",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 153,
+        "prompt_tokens": 108,
+        "total_tokens": 261
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\"reminder\":\"Expansion requires fewer than two support incidents per week.\"}",
+      "seconds": 1.265957,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "guidance",
+      "case": "business",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 137,
+        "prompt_tokens": 100,
+        "total_tokens": 237
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\"reminder\":\"Random assignment helps reduce confounding.\"}",
+      "seconds": 1.328306,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "guidance",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 425,
+        "prompt_tokens": 287,
+        "total_tokens": 712
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"A stale model result must not advance the slide.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"Manual slide changes invalidate pending coverage judgments.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"On network failure the presenter retains manual control.\"}]}",
+      "seconds": 3.095618,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "extraction",
+      "case": "engineering",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 471,
+        "prompt_tokens": 292,
+        "total_tokens": 763
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"The pilot serves 20 volunteer presenters.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"The pilot lasts six weeks before a rollout decision.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"Expansion requires fewer than two support incidents per week.\"}]}",
+      "seconds": 3.232567,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "extraction",
+      "case": "business",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 297,
+        "prompt_tokens": 284,
+        "total_tokens": 581
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"Correlation alone does not establish causation.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"A confounder can influence both observed variables.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"Random assignment helps reduce confounding.\"}]}",
+      "seconds": 2.171013,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "extraction",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 203,
+        "prompt_tokens": 1233,
+        "total_tokens": 1436
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.844522,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "coverage",
+      "case": "engineering",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 268,
+        "prompt_tokens": 1237,
+        "total_tokens": 1505
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.211789,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "coverage",
+      "case": "business",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 253,
+        "prompt_tokens": 1227,
+        "total_tokens": 1480
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.236639,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "coverage",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 171,
+        "prompt_tokens": 103,
+        "total_tokens": 274
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.736252,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "guidance",
+      "case": "engineering",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 196,
+        "prompt_tokens": 108,
+        "total_tokens": 304
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"Expansion requires fewer than two support incidents per week.\"}",
+      "seconds": 1.858028,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "guidance",
+      "case": "business",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 116,
+        "prompt_tokens": 100,
+        "total_tokens": 216
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"Random assignment helps reduce confounding.\"}",
+      "seconds": 1.469857,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "guidance",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 503,
+        "prompt_tokens": 287,
+        "total_tokens": 790
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"A stale model result must not advance the slide.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"Manual slide changes invalidate pending coverage judgments.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"On network failure the presenter retains manual control.\"}]}",
+      "seconds": 2.073534,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "extraction",
+      "case": "engineering",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 687,
+        "prompt_tokens": 292,
+        "total_tokens": 979
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"The pilot serves 20 volunteer presenters.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"The pilot lasts six weeks before a rollout decision.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"Expansion requires fewer than two support incidents per week.\"}]}",
+      "seconds": 2.547088,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "extraction",
+      "case": "business",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 420,
+        "prompt_tokens": 284,
+        "total_tokens": 704
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"Correlation alone does not establish causation.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"A confounder can influence both observed variables.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"Random assignment helps reduce confounding.\"}]}",
+      "seconds": 1.602307,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "extraction",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 466,
+        "prompt_tokens": 1233,
+        "total_tokens": 1699
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 1.994146,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "coverage",
+      "case": "engineering",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 244,
+        "prompt_tokens": 1237,
+        "total_tokens": 1481
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 1.634011,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "coverage",
+      "case": "business",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 311,
+        "prompt_tokens": 1227,
+        "total_tokens": 1538
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 1.770065,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "coverage",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 160,
+        "prompt_tokens": 103,
+        "total_tokens": 263
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.178798,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "guidance",
+      "case": "engineering",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 206,
+        "prompt_tokens": 108,
+        "total_tokens": 314
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"Expansion requires fewer than two support incidents per week.\"}",
+      "seconds": 1.285266,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "guidance",
+      "case": "business",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 216,
+        "prompt_tokens": 100,
+        "total_tokens": 316
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"Random assignment helps reduce confounding.\"}",
+      "seconds": 1.318263,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "guidance",
+      "case": "education",
+      "round": 1,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 828,
+        "prompt_tokens": 287,
+        "total_tokens": 1115
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\n      \"ref\": \"slide/0/element/0\",\n      \"text\": \"A stale model result must not advance the slide.\"\n    },\n    {\n      \"ref\": \"slide/0/element/1/element/0/element/0\",\n      \"text\": \"Manual slide changes invalidate pending coverage judgments.\"\n    },\n    {\n      \"ref\": \"slide/0/notes\",\n      \"text\": \"Pause here.\\nOn network failure the presenter retains manual control.\"\n    }\n  ]\n}",
+      "seconds": 4.876252,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "extraction",
+      "case": "engineering",
+      "round": 2,
+      "correct": false
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 972,
+        "prompt_tokens": 292,
+        "total_tokens": 1264
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\n      \"ref\": \"slide/0/element/0\",\n      \"text\": \"The pilot serves 20 volunteer presenters.\"\n    },\n    {\n      \"ref\": \"slide/0/element/1/element/0/element/0\",\n      \"text\": \"The pilot lasts six weeks before a rollout decision.\"\n    },\n    {\n      \"ref\": \"slide/0/notes\",\n      \"text\": \"Expansion requires fewer than two support incidents per week.\"\n    }\n  ]\n}",
+      "seconds": 6.277462,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "extraction",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 487,
+        "prompt_tokens": 284,
+        "total_tokens": 771
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\n      \"ref\": \"slide/0/element/0\",\n      \"text\": \"Correlation alone does not establish causation.\"\n    },\n    {\n      \"ref\": \"slide/0/element/1/element/0/element/0\",\n      \"text\": \"A confounder can influence both observed variables.\"\n    },\n    {\n      \"ref\": \"slide/0/notes\",\n      \"text\": \"Random assignment helps reduce confounding.\"\n    }\n  ]\n}",
+      "seconds": 3.685961,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "extraction",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 332,
+        "prompt_tokens": 1233,
+        "total_tokens": 1565
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 2.746384,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "coverage",
+      "case": "engineering",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 654,
+        "prompt_tokens": 1237,
+        "total_tokens": 1891
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 4.796082,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "coverage",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 261,
+        "prompt_tokens": 1227,
+        "total_tokens": 1488
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 2.20641,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "coverage",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 236,
+        "prompt_tokens": 103,
+        "total_tokens": 339
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"reminder\": \"On network failure the presenter retains manual control.\"\n}",
+      "seconds": 2.027995,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "guidance",
+      "case": "engineering",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 108,
+        "total_tokens": 227
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"reminder\": \"Expansion requires fewer than two support incidents per week.\"\n}",
+      "seconds": 1.119116,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "guidance",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 136,
+        "prompt_tokens": 100,
+        "total_tokens": 236
+      },
+      "rate_limits": {
+        "x-ratelimit-limit-requests": "[redacted]",
+        "x-ratelimit-limit-tokens": "[redacted]",
+        "x-ratelimit-remaining-requests": "[redacted]",
+        "x-ratelimit-remaining-tokens": "[redacted]",
+        "x-ratelimit-reset-requests": "[redacted]",
+        "x-ratelimit-reset-tokens": "[redacted]",
+        "x-ratelimit-dynamic-scale-requests": "[redacted]",
+        "x-ratelimit-dynamic-scale-tokens": "[redacted]",
+        "x-ratelimit-dynamic-period-remaining": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-requests": "[redacted]",
+        "x-ratelimit-dynamic-period-usage-tokens": "[redacted]"
+      },
+      "finish_reason": "stop",
+      "content": "{\n  \"reminder\": \"Random assignment helps reduce confounding.\"\n}",
+      "seconds": 1.184193,
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "workload": "guidance",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 425,
+        "prompt_tokens": 287,
+        "total_tokens": 712
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"A stale model result must not advance the slide.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"Manual slide changes invalidate pending coverage judgments.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"On network failure the presenter retains manual control.\"}]}",
+      "seconds": 2.996724,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "extraction",
+      "case": "engineering",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 471,
+        "prompt_tokens": 292,
+        "total_tokens": 763
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"The pilot serves 20 volunteer presenters.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"The pilot lasts six weeks before a rollout decision.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"Expansion requires fewer than two support incidents per week.\"}]}",
+      "seconds": 3.318283,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "extraction",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 297,
+        "prompt_tokens": 284,
+        "total_tokens": 581
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"Correlation alone does not establish causation.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"A confounder can influence both observed variables.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"Random assignment helps reduce confounding.\"}]}",
+      "seconds": 2.40436,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "extraction",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 277,
+        "prompt_tokens": 1233,
+        "total_tokens": 1510
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.192217,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "coverage",
+      "case": "engineering",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 336,
+        "prompt_tokens": 1237,
+        "total_tokens": 1573
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.629447,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "coverage",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.764637,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "coverage",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 171,
+        "prompt_tokens": 103,
+        "total_tokens": 274
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.70136,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "guidance",
+      "case": "engineering",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 196,
+        "prompt_tokens": 108,
+        "total_tokens": 304
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"Expansion requires fewer than two support incidents per week.\"}",
+      "seconds": 1.761253,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "guidance",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 116,
+        "prompt_tokens": 100,
+        "total_tokens": 216
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"Random assignment helps reduce confounding.\"}",
+      "seconds": 1.488287,
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "workload": "guidance",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 503,
+        "prompt_tokens": 287,
+        "total_tokens": 790
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"A stale model result must not advance the slide.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"Manual slide changes invalidate pending coverage judgments.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"On network failure the presenter retains manual control.\"}]}",
+      "seconds": 2.013676,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "extraction",
+      "case": "engineering",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 687,
+        "prompt_tokens": 292,
+        "total_tokens": 979
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"The pilot serves 20 volunteer presenters.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"The pilot lasts six weeks before a rollout decision.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"Expansion requires fewer than two support incidents per week.\"}]}",
+      "seconds": 2.428609,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "extraction",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 420,
+        "prompt_tokens": 284,
+        "total_tokens": 704
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"Correlation alone does not establish causation.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"A confounder can influence both observed variables.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"Random assignment helps reduce confounding.\"}]}",
+      "seconds": 1.617023,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "extraction",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 466,
+        "prompt_tokens": 1233,
+        "total_tokens": 1699
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 2.01769,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "coverage",
+      "case": "engineering",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 244,
+        "prompt_tokens": 1237,
+        "total_tokens": 1481
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 1.543635,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "coverage",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 311,
+        "prompt_tokens": 1227,
+        "total_tokens": 1538
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\n  \"concepts\": [\n    {\"id\": 1, \"status\": \"covered\"},\n    {\"id\": 2, \"status\": \"covered\"},\n    {\"id\": 3, \"status\": \"not_covered\"}\n  ],\n  \"slide_complete\": false\n}",
+      "seconds": 1.790615,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "coverage",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 160,
+        "prompt_tokens": 103,
+        "total_tokens": 263
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.172956,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "guidance",
+      "case": "engineering",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 206,
+        "prompt_tokens": 108,
+        "total_tokens": 314
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"Expansion requires fewer than two support incidents per week.\"}",
+      "seconds": 1.29183,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "guidance",
+      "case": "business",
+      "round": 2,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 216,
+        "prompt_tokens": 100,
+        "total_tokens": 316
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"Random assignment helps reduce confounding.\"}",
+      "seconds": 1.303938,
+      "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+      "workload": "guidance",
+      "case": "education",
+      "round": 2,
+      "correct": true
+    }
+  ]
+}

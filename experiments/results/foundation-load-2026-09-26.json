@@ -1,0 +1,867 @@
+{
+  "observed_at": "2026-09-26T19:47:50.836845+00:00",
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "synthetic_only": true,
+  "workers": 1,
+  "cadence_seconds": 5,
+  "coverage_deadline_seconds": 5,
+  "updates": 36,
+  "records": [
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 206,
+        "prompt_tokens": 1233,
+        "total_tokens": 1439
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.84452,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 1,
+      "queue_seconds": 0.000688,
+      "end_to_end_seconds": 1.84541,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 163,
+        "prompt_tokens": 103,
+        "total_tokens": 266
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.689697,
+      "workload": "guidance",
+      "case": "engineering",
+      "update": 1,
+      "queue_seconds": 1.845452,
+      "end_to_end_seconds": 3.535252,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 425,
+        "prompt_tokens": 287,
+        "total_tokens": 712
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"A stale model result must not advance the slide.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"Manual slide changes invalidate pending coverage judgments.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"On network failure the presenter retains manual control.\"}]}",
+      "seconds": 3.056207,
+      "workload": "extraction",
+      "case": "engineering",
+      "update": 1,
+      "queue_seconds": 3.535273,
+      "end_to_end_seconds": 6.591608,
+      "deadline_met": false,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 336,
+        "prompt_tokens": 1237,
+        "total_tokens": 1573
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.752641,
+      "workload": "coverage",
+      "case": "business",
+      "update": 2,
+      "queue_seconds": 1.59239,
+      "end_to_end_seconds": 4.345119,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.008002,
+      "workload": "coverage",
+      "case": "education",
+      "update": 3,
+      "queue_seconds": 0.000833,
+      "end_to_end_seconds": 2.008941,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 203,
+        "prompt_tokens": 1233,
+        "total_tokens": 1436
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.097869,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 4,
+      "queue_seconds": 0.001144,
+      "end_to_end_seconds": 2.099203,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 268,
+        "prompt_tokens": 1237,
+        "total_tokens": 1505
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.221406,
+      "workload": "coverage",
+      "case": "business",
+      "update": 5,
+      "queue_seconds": 0.000902,
+      "end_to_end_seconds": 2.222428,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.970816,
+      "workload": "coverage",
+      "case": "education",
+      "update": 6,
+      "queue_seconds": 0.000978,
+      "end_to_end_seconds": 1.971916,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 281,
+        "prompt_tokens": 1233,
+        "total_tokens": 1514
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.296709,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 7,
+      "queue_seconds": 0.001024,
+      "end_to_end_seconds": 2.297837,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 180,
+        "prompt_tokens": 103,
+        "total_tokens": 283
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.681481,
+      "workload": "guidance",
+      "case": "engineering",
+      "update": 7,
+      "queue_seconds": 2.297866,
+      "end_to_end_seconds": 3.979439,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 268,
+        "prompt_tokens": 1237,
+        "total_tokens": 1505
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.121979,
+      "workload": "coverage",
+      "case": "business",
+      "update": 8,
+      "queue_seconds": 0.000906,
+      "end_to_end_seconds": 2.12299,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.862549,
+      "workload": "coverage",
+      "case": "education",
+      "update": 9,
+      "queue_seconds": 0.000917,
+      "end_to_end_seconds": 1.863578,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 206,
+        "prompt_tokens": 1233,
+        "total_tokens": 1439
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.847255,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 10,
+      "queue_seconds": 0.001143,
+      "end_to_end_seconds": 1.84856,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 324,
+        "prompt_tokens": 1237,
+        "total_tokens": 1561
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.786101,
+      "workload": "coverage",
+      "case": "business",
+      "update": 11,
+      "queue_seconds": 0.001255,
+      "end_to_end_seconds": 2.787538,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.779361,
+      "workload": "coverage",
+      "case": "education",
+      "update": 12,
+      "queue_seconds": 0.00091,
+      "end_to_end_seconds": 1.780405,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 206,
+        "prompt_tokens": 1233,
+        "total_tokens": 1439
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.948771,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 13,
+      "queue_seconds": 0.000935,
+      "end_to_end_seconds": 1.949842,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 163,
+        "prompt_tokens": 103,
+        "total_tokens": 266
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.739059,
+      "workload": "guidance",
+      "case": "engineering",
+      "update": 13,
+      "queue_seconds": 1.949884,
+      "end_to_end_seconds": 3.689082,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 425,
+        "prompt_tokens": 287,
+        "total_tokens": 712
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"A stale model result must not advance the slide.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"Manual slide changes invalidate pending coverage judgments.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"On network failure the presenter retains manual control.\"}]}",
+      "seconds": 2.964019,
+      "workload": "extraction",
+      "case": "engineering",
+      "update": 13,
+      "queue_seconds": 3.689098,
+      "end_to_end_seconds": 6.653286,
+      "deadline_met": false,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 336,
+        "prompt_tokens": 1237,
+        "total_tokens": 1573
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.81827,
+      "workload": "coverage",
+      "case": "business",
+      "update": 14,
+      "queue_seconds": 1.654182,
+      "end_to_end_seconds": 4.472568,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.927071,
+      "workload": "coverage",
+      "case": "education",
+      "update": 15,
+      "queue_seconds": 0.003227,
+      "end_to_end_seconds": 1.930444,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 277,
+        "prompt_tokens": 1233,
+        "total_tokens": 1510
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.10814,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 16,
+      "queue_seconds": 0.000914,
+      "end_to_end_seconds": 2.109222,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 364,
+        "prompt_tokens": 1237,
+        "total_tokens": 1601
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.891737,
+      "workload": "coverage",
+      "case": "business",
+      "update": 17,
+      "queue_seconds": 0.001454,
+      "end_to_end_seconds": 2.893347,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 253,
+        "prompt_tokens": 1227,
+        "total_tokens": 1480
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.329904,
+      "workload": "coverage",
+      "case": "education",
+      "update": 18,
+      "queue_seconds": 0.001388,
+      "end_to_end_seconds": 2.331449,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 206,
+        "prompt_tokens": 1233,
+        "total_tokens": 1439
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.101869,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 19,
+      "queue_seconds": 0.001533,
+      "end_to_end_seconds": 2.103582,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 180,
+        "prompt_tokens": 103,
+        "total_tokens": 283
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.689993,
+      "workload": "guidance",
+      "case": "engineering",
+      "update": 19,
+      "queue_seconds": 2.103628,
+      "end_to_end_seconds": 3.793763,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 268,
+        "prompt_tokens": 1237,
+        "total_tokens": 1505
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.194009,
+      "workload": "coverage",
+      "case": "business",
+      "update": 20,
+      "queue_seconds": 0.001539,
+      "end_to_end_seconds": 2.195708,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.792129,
+      "workload": "coverage",
+      "case": "education",
+      "update": 21,
+      "queue_seconds": 0.001199,
+      "end_to_end_seconds": 1.793514,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 277,
+        "prompt_tokens": 1233,
+        "total_tokens": 1510
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.263125,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 22,
+      "queue_seconds": 0.001073,
+      "end_to_end_seconds": 2.264355,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 268,
+        "prompt_tokens": 1237,
+        "total_tokens": 1505
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.171011,
+      "workload": "coverage",
+      "case": "business",
+      "update": 23,
+      "queue_seconds": 0.000984,
+      "end_to_end_seconds": 2.17213,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.845232,
+      "workload": "coverage",
+      "case": "education",
+      "update": 24,
+      "queue_seconds": 0.000898,
+      "end_to_end_seconds": 1.846257,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 277,
+        "prompt_tokens": 1233,
+        "total_tokens": 1510
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.206639,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 25,
+      "queue_seconds": 0.001012,
+      "end_to_end_seconds": 2.20779,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 180,
+        "prompt_tokens": 103,
+        "total_tokens": 283
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.626544,
+      "workload": "guidance",
+      "case": "engineering",
+      "update": 25,
+      "queue_seconds": 2.207828,
+      "end_to_end_seconds": 3.834495,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 395,
+        "prompt_tokens": 287,
+        "total_tokens": 682
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"ref\": \"slide/0/element/0\", \"text\": \"A stale model result must not advance the slide.\"}, {\"ref\": \"slide/0/element/1/element/0/element/0\", \"text\": \"Manual slide changes invalidate pending coverage judgments.\"}, {\"ref\": \"slide/0/notes\", \"text\": \"On network failure the presenter retains manual control.\"}]}",
+      "seconds": 3.087637,
+      "workload": "extraction",
+      "case": "engineering",
+      "update": 25,
+      "queue_seconds": 3.834511,
+      "end_to_end_seconds": 6.922307,
+      "deadline_met": false,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 336,
+        "prompt_tokens": 1237,
+        "total_tokens": 1573
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 3.890328,
+      "workload": "coverage",
+      "case": "business",
+      "update": 26,
+      "queue_seconds": 1.923235,
+      "end_to_end_seconds": 5.813692,
+      "deadline_met": false,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.479392,
+      "workload": "coverage",
+      "case": "education",
+      "update": 27,
+      "queue_seconds": 0.814535,
+      "end_to_end_seconds": 3.294035,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 203,
+        "prompt_tokens": 1233,
+        "total_tokens": 1436
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.891952,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 28,
+      "queue_seconds": 0.000994,
+      "end_to_end_seconds": 1.8931,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 336,
+        "prompt_tokens": 1237,
+        "total_tokens": 1573
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.765079,
+      "workload": "coverage",
+      "case": "business",
+      "update": 29,
+      "queue_seconds": 0.001477,
+      "end_to_end_seconds": 2.766705,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.898619,
+      "workload": "coverage",
+      "case": "education",
+      "update": 30,
+      "queue_seconds": 0.001645,
+      "end_to_end_seconds": 1.900408,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 277,
+        "prompt_tokens": 1233,
+        "total_tokens": 1510
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.194806,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 31,
+      "queue_seconds": 0.001466,
+      "end_to_end_seconds": 2.196425,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 161,
+        "prompt_tokens": 103,
+        "total_tokens": 264
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"reminder\": \"On network failure the presenter retains manual control.\"}",
+      "seconds": 1.860349,
+      "workload": "guidance",
+      "case": "engineering",
+      "update": 31,
+      "queue_seconds": 2.196462,
+      "end_to_end_seconds": 4.056945,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 277,
+        "prompt_tokens": 1237,
+        "total_tokens": 1514
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.541672,
+      "workload": "coverage",
+      "case": "business",
+      "update": 32,
+      "queue_seconds": 0.001345,
+      "end_to_end_seconds": 2.543154,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 204,
+        "prompt_tokens": 1227,
+        "total_tokens": 1431
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 1.813234,
+      "workload": "coverage",
+      "case": "education",
+      "update": 33,
+      "queue_seconds": 0.00103,
+      "end_to_end_seconds": 1.814422,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 277,
+        "prompt_tokens": 1233,
+        "total_tokens": 1510
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.270271,
+      "workload": "coverage",
+      "case": "engineering",
+      "update": 34,
+      "queue_seconds": 0.001238,
+      "end_to_end_seconds": 2.271651,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 336,
+        "prompt_tokens": 1237,
+        "total_tokens": 1573
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.692582,
+      "workload": "coverage",
+      "case": "business",
+      "update": 35,
+      "queue_seconds": 0.001303,
+      "end_to_end_seconds": 2.69403,
+      "deadline_met": true,
+      "correct": true
+    },
+    {
+      "usable": true,
+      "usage": {
+        "completion_tokens": 253,
+        "prompt_tokens": 1227,
+        "total_tokens": 1480
+      },
+      "rate_limits": {},
+      "finish_reason": "stop",
+      "content": "{\"concepts\": [{\"id\": 1, \"status\": \"covered\"}, {\"id\": 2, \"status\": \"covered\"}, {\"id\": 3, \"status\": \"not_covered\"}], \"slide_complete\": false}",
+      "seconds": 2.406486,
+      "workload": "coverage",
+      "case": "education",
+      "update": 36,
+      "queue_seconds": 0.001749,
+      "end_to_end_seconds": 2.408379,
+      "deadline_met": true,
+      "correct": true
+    }
+  ],
+  "duration_seconds": 177.40842
+}

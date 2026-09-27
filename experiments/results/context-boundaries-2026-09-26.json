@@ -1,0 +1,131 @@
+{
+  "synthetic_prompt": "Return only {}.",
+  "temperature": 0,
+  "records": [
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "requested_max_tokens": 262145,
+      "http": 400,
+      "context_limit_numbers": [
+        "262144",
+        "262144"
+      ],
+      "numeric_values": [
+        "262145",
+        "262144",
+        "262145",
+        "400",
+        "262145",
+        "262144",
+        "262145"
+      ],
+      "mentions_context": false,
+      "mentions_max_tokens": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "requested_max_tokens": 262144,
+      "http": 400,
+      "context_limit_numbers": [
+        "262144",
+        "262144"
+      ],
+      "numeric_values": [
+        "262144",
+        "262144",
+        "103",
+        "0",
+        "0",
+        "103",
+        "400",
+        "262144",
+        "262144",
+        "103",
+        "0",
+        "0",
+        "103"
+      ],
+      "mentions_context": true,
+      "mentions_max_tokens": false
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "requested_max_tokens": 262040,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 20,
+        "completion_tokens": 23,
+        "total_tokens": 43
+      },
+      "finish_reason": "stop"
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "requested_max_tokens": 262041,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 20,
+        "completion_tokens": 23,
+        "total_tokens": 43
+      },
+      "finish_reason": "stop"
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "requested_max_tokens": 262042,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 20,
+        "completion_tokens": 23,
+        "total_tokens": 43
+      },
+      "finish_reason": "stop"
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "requested_max_tokens": 262123,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 20,
+        "completion_tokens": 50,
+        "total_tokens": 70
+      },
+      "finish_reason": "stop"
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "requested_max_tokens": 262124,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 20,
+        "completion_tokens": 50,
+        "total_tokens": 70
+      },
+      "finish_reason": "stop"
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "requested_max_tokens": 262125,
+      "http": 400,
+      "context_limit_numbers": [
+        "262144",
+        "262144"
+      ],
+      "numeric_values": [
+        "262144",
+        "262125",
+        "20",
+        "262145",
+        "20",
+        "400",
+        "262144",
+        "262125",
+        "20",
+        "262145",
+        "20"
+      ],
+      "mentions_context": true,
+      "mentions_max_tokens": false
+    }
+  ]
+}

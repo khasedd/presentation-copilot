@@ -5,6 +5,7 @@
 - Read the assigned task and relevant repository documentation before changing anything.
 - Keep changes small, purposeful, reviewable, and within the approved task. Do not silently expand scope or implement unrelated features.
 - Preserve working behavior. Do not perform major architecture rewrites without a documented reason and explicit task authority.
+- Finish and verify all tasks in earlier roadmap phases before starting or resuming later phases. A partial exit gate does not waive unchecked tasks; any deferral requires an explicit owner-approved scope change.
 - Build the roadmap incrementally: prove individual risks before combining subsystems. Do not implement speculative future features outside the current roadmap milestone.
 - Prefer clear, modular interfaces and simple designs over cleverness, premature optimization, or unnecessary abstraction.
 - Use descriptive names, keep modules cohesive, document non-obvious decisions, and maintain backwards compatibility when an existing public interface requires it.
