@@ -89,6 +89,30 @@ class DeepgramAdapterTests(unittest.TestCase):
         self.assertEqual([segment.status for segment in self.adapter.accumulator.state.segments],
                          ["final", "partial"])
 
+    def test_shorter_final_clips_tentative_word_crossing_final_boundary(self):
+        self.adapter.accept(result(
+            "alpha beta gamma", 0, 3,
+            words=[word("alpha", 0, 1), word("beta", 1, 2.1),
+                   word("gamma", 2.1, 3)]), observed_at_ms=3100)
+
+        emitted = self.adapter.accept(result(
+            "alpha", 0, 2, final=True,
+            words=[word("alpha", 0, 1)]), observed_at_ms=3200)
+
+        settled, remainder = (event.payload for event in emitted)
+        self.assertEqual((settled.status, settled.text, settled.end_ms),
+                         ("final", "alpha", 2000))
+        self.assertEqual((remainder.status, remainder.text,
+                          remainder.start_ms, remainder.end_ms),
+                         ("partial", "beta gamma", 2000, 3000))
+
+        revision = self.adapter.accept(result(
+            "beta gamma revised", 2, 2,
+            words=[word("beta", 2, 2.4), word("gamma", 2.4, 3),
+                   word("revised", 3, 4)]), observed_at_ms=4100)[0].payload
+        self.assertEqual((revision.segment_id, revision.revision),
+                         (remainder.segment_id, 2))
+
     def test_provider_timestamps_round_to_milliseconds(self):
         update = self.adapter.accept(result(
             "timed", 0.1254, 0.7504,
