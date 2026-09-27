@@ -160,6 +160,37 @@ class DeepgramAdapterTests(unittest.TestCase):
         self.assertEqual(caught.exception.code, "shorter_final_incompatible")
         self.assertEqual(self.adapter.accumulator.state.sequence, 1)
 
+    def test_shorter_final_with_all_timed_words_inside_span_is_one_revision(self):
+        self.adapter.accept(result(
+            "today I am demonstrating the live technical assistant", 0, 4,
+            words=[
+                word("today", 0, 0.4),
+                word("I", 0.4, 0.6),
+                word("am", 0.6, 0.8),
+                word("demonstrating", 0.8, 1.5),
+                word("the", 1.5, 1.7),
+                word("live", 1.7, 2.1),
+                word("technical", 2.1, 2.7),
+                word("assistant", 2.7, 3.9),
+            ]), observed_at_ms=4100)
+
+        emitted = self.adapter.accept(result(
+            "today I demonstrated the assistant", 0, 3.92, final=True,
+            words=[
+                word("today", 0, 0.4),
+                word("I", 0.4, 0.6),
+                word("demonstrated", 0.6, 1.5),
+                word("the", 1.5, 1.7),
+                word("assistant", 1.7, 3.9),
+            ]), observed_at_ms=4200)
+
+        self.assertEqual(len(emitted), 1)
+        update = emitted[0].payload
+        self.assertEqual((update.segment_index, update.revision, update.status),
+                         (0, 2, "final"))
+        self.assertEqual((update.start_ms, update.end_ms), (0, 3920))
+        self.assertEqual(self.adapter.accumulator.state.segments, (update,))
+
     def test_observation_offsets_and_close_counters_are_consecutive(self):
         self.adapter.accept(result("one", 0, 0.1), observed_at_ms=150)
         self.adapter.accept(result("one", 0, 0.1, final=True), observed_at_ms=180)
