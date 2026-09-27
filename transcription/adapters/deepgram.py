@@ -308,7 +308,10 @@ class DeepgramAdapter:
         if result.start_ms != active.start_ms:
             raise _error("invalid_transition")
         if result.is_final and result.end_ms < active.end_ms:
-            return self._shorter_final(result, observed_at_ms)
+            has_timed_remainder = any(
+                word.end_ms > result.end_ms for word in active.words)
+            if not active.words or has_timed_remainder:
+                return self._shorter_final(result, observed_at_ms)
 
         event = self._segment_update(
             segment_id=active.segment_id,
