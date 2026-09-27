@@ -148,6 +148,54 @@ class DeepgramAdapterTests(unittest.TestCase):
             observed_at_ms=2200)
         self.assertEqual(emitted[1].payload.text, "beta")
 
+    def test_optional_word_metadata_variance_cannot_abort_valid_result(self):
+        noisy_words = [
+            word("alpha", -0.02, 1),
+            {"word": "missing timing", "start": None, "end": 1.5},
+            "not a word object",
+            word("gamma", 2.9, 3.05),
+        ]
+        first = self.adapter.accept(result(
+            "alpha beta gamma", 0, 3, words=noisy_words),
+            observed_at_ms=3100)
+        self.assertEqual(first[0].payload.text, "alpha beta gamma")
+
+        emitted = self.adapter.accept(result(
+            "alpha beta", 0, 2, final=True,
+            words=[word("alpha", 0, 1), word("beta", 1, 2)]),
+            observed_at_ms=3200)
+        self.assertEqual(len(emitted), 2)
+        self.assertEqual(emitted[1].payload.text, "gamma")
+        self.assertEqual(
+            (emitted[1].payload.start_ms, emitted[1].payload.end_ms),
+            (2000, 3000),
+        )
+
+        replacement = DeepgramAdapter(
+            session_id="session-a",
+            source_id="internal-mic",
+            started_at=STARTED_AT,
+            stream_id="stream-b",
+        )
+        message = result("valid result text", 0, 1)
+        message["channel"]["alternatives"][0]["words"] = None
+        update = replacement.accept(message, observed_at_ms=1100)[0].payload
+        self.assertEqual(update.text, "valid result text")
+
+    def test_required_result_shape_has_content_free_reason_codes(self):
+        cases = (
+            (result("private transcript", -1, 1), "invalid_result_timing"),
+            (result("private transcript", 0, True), "invalid_result_timing"),
+            ({"type": "Results", "start": 0, "duration": 1,
+              "is_final": False, "channel": {}}, "invalid_result_alternatives"),
+        )
+        for message, expected_code in cases:
+            with self.subTest(expected_code=expected_code), \
+                    self.assertRaises(DeepgramAdapterError) as caught:
+                self.adapter.accept(message, observed_at_ms=2000)
+            self.assertEqual(caught.exception.code, expected_code)
+            self.assertNotIn("private", str(caught.exception))
+
     def test_empty_and_non_result_messages_are_no_ops(self):
         messages = [
             {"type": "Metadata", "request_id": "sanitized"},
