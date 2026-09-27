@@ -57,7 +57,7 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-deepgram-poc.txt
 ```
 
-Display the fixed scripts before each trial with `sed -n '33,61p' experiments/deepgram_live.py`. Run only while the presenter is ready to speak; existing evidence files are never overwritten:
+Display the fixed scripts before each trial with `sed -n '33,61p' experiments/deepgram_live.py`. Run only while the presenter is ready to speak, begin reading as soon as the command is launched, and rely on the command ending—not a separate chat cue—to know capture has stopped. Existing evidence files are never overwritten:
 
 ```bash
 .venv/bin/python -m experiments.deepgram_live --trial A --duration 90 \
