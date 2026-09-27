@@ -202,6 +202,9 @@ class DeepgramAdapterTests(unittest.TestCase):
             {"type": "SpeechStarted", "timestamp": 0.1},
             {"type": "UtteranceEnd", "last_word_end": 0.2},
             result("", 0, 0.2, words=[]),
+            {"type": "Results", "start": 0, "duration": 0.2,
+             "is_final": False, "speech_final": False,
+             "channel": {"alternatives": []}},
         ]
         for message in messages:
             self.assertEqual(self.adapter.accept(message, observed_at_ms=300), ())
