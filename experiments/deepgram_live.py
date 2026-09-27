@@ -336,15 +336,16 @@ def _update_evidence(
     events,
     lag_ms: float | None,
 ) -> None:
+    updates = [event.payload for event in events
+               if isinstance(event.payload, SegmentUpdated)]
+    if not updates:
+        return
     is_final = message.get("is_final") is True
     if message.get("speech_final") is True:
         evidence.endpoint_events += 1
     if len(events) == 2:
         evidence.shorter_finals += 1
-    for event in events:
-        payload = event.payload
-        if not isinstance(payload, SegmentUpdated):
-            continue
+    for payload in updates:
         if payload.status == "partial":
             evidence.partial_events += 1
             if payload.revision > 1:
