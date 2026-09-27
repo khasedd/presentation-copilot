@@ -617,18 +617,26 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         output = _safe_output_path(args.output)
         output.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-        descriptor = os.open(output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-        report = asyncio.run(run_trial(
-            trial=args.trial,
-            key=key,
-            source=args.source,
-            duration_seconds=args.duration,
-            native_format=args.native_format,
-            network_context=args.network_context,
-        ))
-        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
-            json.dump(report, handle, indent=2, sort_keys=True)
-            handle.write("\n")
+        descriptor: int | None = os.open(
+            output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        try:
+            report = asyncio.run(run_trial(
+                trial=args.trial,
+                key=key,
+                source=args.source,
+                duration_seconds=args.duration,
+                native_format=args.native_format,
+                network_context=args.network_context,
+            ))
+            with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+                descriptor = None
+                json.dump(report, handle, indent=2, sort_keys=True)
+                handle.write("\n")
+        except BaseException:
+            if descriptor is not None:
+                os.close(descriptor)
+            output.unlink(missing_ok=True)
+            raise
         print(f"Trial {args.trial} complete; aggregate evidence written to {output}")
         return 0
     except FileExistsError:
