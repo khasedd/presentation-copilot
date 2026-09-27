@@ -389,6 +389,12 @@ async def _run_stream(
     capture = None
     websocket = None
     intentional_disconnect = False
+
+    def current_observed_ms() -> int:
+        elapsed_ms = max(0, round((time.monotonic() - stream_started) * 1000))
+        state = adapter.accumulator.state
+        return max(elapsed_ms, state.observed_at_ms if state else 0)
+
     try:
         websocket = await websockets.connect(
             build_listen_url(config),
@@ -470,7 +476,7 @@ async def _run_stream(
                 send_task.cancel()
                 await asyncio.gather(send_task, return_exceptions=True)
 
-        observed_ms = max(0, round((time.monotonic() - stream_started) * 1000))
+        observed_ms = current_observed_ms()
         if intentional_disconnect:
             adapter.fail(observed_at_ms=observed_ms, code="intentional_disconnect")
             evidence.disconnect_detected = True
@@ -482,7 +488,7 @@ async def _run_stream(
     except Exception as error:
         if websocket is not None and adapter.accumulator.state \
                 and adapter.accumulator.state.end_reason is None:
-            observed_ms = max(0, round((time.monotonic() - stream_started) * 1000))
+            observed_ms = current_observed_ms()
             adapter.fail(observed_at_ms=observed_ms, code="transport_failure")
         if isinstance(error, LiveExperimentError):
             raise
