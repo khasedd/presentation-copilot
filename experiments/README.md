@@ -1,4 +1,6 @@
-# Semantic-coverage proof of concept
+# Experiments
+
+## Semantic-coverage proof of concept
 
 `semantic_coverage.py` is the first isolated experiment for Presentation Copilot's core question: given one slide's required concepts and what a presenter said, which concepts were semantically covered?
 
@@ -43,3 +45,38 @@ Case A used the paraphrase “which words are relevant to other words in the seq
 ## Phase 1 comparison
 
 The [small four-model benchmark](BENCHMARK.md) reuses these exact cases and validation. Across 48 live requests, Super passed 12/12, Nano 11/12, Ultra 6/12, and Lightning 0/12 under the unchanged 300-token cap. Super remains the provisional choice; all failures hit the token limit. See the report for timings, token counts, reproduction, and limitations.
+
+## Bounded Deepgram microphone experiment
+
+`deepgram_live.py` is the non-production Phase 3 Nova-3 trial harness. It captures the explicitly named PipeWire-Pulse source with `parec`, requests conversion to 16 kHz mono signed-16 PCM, sends 50 ms chunks over the lower-level Deepgram WebSocket, and normalizes callbacks through the same transcript accumulator used by replay. It writes aggregate measurements only. Raw audio, recognized/reference text, provider response bodies, and credentials are never written; `deepgram-output/` and `.env` are ignored.
+
+Set `DEEPGRAM_API_KEY` in the environment or the ignored local `.env`, then install the one exact POC dependency in an ignored virtual environment:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-deepgram-poc.txt
+```
+
+Display the fixed scripts before each trial with `sed -n '33,61p' experiments/deepgram_live.py`. Run only while the presenter is ready to speak; existing evidence files are never overwritten:
+
+```bash
+.venv/bin/python -m experiments.deepgram_live --trial A --duration 90 \
+  --source alsa_input.pci-0000_63_00.6.analog-stereo \
+  --native-format '48000 Hz, 2 channels, s16' \
+  --network-context 'local residential network' \
+  --output deepgram-output/trial-a.json
+
+.venv/bin/python -m experiments.deepgram_live --trial B --duration 90 \
+  --source alsa_input.pci-0000_63_00.6.analog-stereo \
+  --native-format '48000 Hz, 2 channels, s16' \
+  --network-context 'local residential network' \
+  --output deepgram-output/trial-b.json
+
+.venv/bin/python -m experiments.deepgram_live --trial C --duration 60 \
+  --source alsa_input.pci-0000_63_00.6.analog-stereo \
+  --native-format '48000 Hz, 2 channels, s16' \
+  --network-context 'local residential network' \
+  --output deepgram-output/trial-c.json
+```
+
+Trials A and B use the 201-word presentation script near-field and at realistic presentation distance/ordinary room noise. Trial C uses the 95-word failure script and deliberately creates a failed first stream plus a fresh second stream. Do not combine Trial C text across streams. The fixed thresholds, preflight evidence, privacy limits, and remaining account uncertainty are documented in [the Phase 3 provider record](../docs/phase-3-transcription-options.md#implementation-and-preflight-evidence--september-27-2026).

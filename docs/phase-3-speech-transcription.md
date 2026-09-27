@@ -1,6 +1,6 @@
 # Phase 3 — Transcript contract and deterministic replay
 
-Implemented and verified September 26, 2026, on `codex/phase-3-transcript-contract`. This is the first Phase 3 slice: a provider-independent internal event model, a transcript-only accumulator, and deterministic mock/replay input. The Phase 3 exit gate remains incomplete. No microphone, transcription provider, semantic coverage integration, presentation control, or application session orchestration is implemented.
+Implemented and verified September 26, 2026, on `codex/phase-3-transcript-contract`. This was the first Phase 3 slice: a provider-independent internal event model, a transcript-only accumulator, and deterministic mock/replay input. The current Deepgram POC branch adds the bounded provider adapter and experimental in-memory microphone/WebSocket harness described below without changing schema 1.0. The Phase 3 exit gate remains incomplete because the three scored presentation trials are pending. No semantic coverage integration, presentation control, UI, or application session orchestration is introduced.
 
 ## Architecture and scope
 
@@ -9,8 +9,10 @@ Implemented and verified September 26, 2026, on `codex/phase-3-transcript-contra
 - `model.py` owns events, per-event validation and exact-schema JSON serialization/decoding.
 - `stream.py` owns one ordered transcript stream and validates cross-event transitions.
 - `replay.py` reads small UTF-8 JSON event arrays and feeds those events through the same accumulator future adapters will use.
+- `adapters/deepgram.py` owns the provisional provider mapping, including counters, stream/segment IDs, timestamps, partial/final transitions, shorter-final remainder handling, failure, and reconnect boundaries.
+- `experiments/deepgram_live.py` is a non-production PipeWire-Pulse/WebSocket trial harness. It is separate from provider-independent transcript code and writes only aggregate evidence under an ignored directory.
 
-No dependencies or services were added. The existing substantive Nebius/NVIDIA path is untouched. This contract slice made no provider/compliance claim. The subsequent [transcription-component investigation](phase-3-transcription-options.md) records the provisional POC selection without implementing it.
+The original contract/replay slice added no dependency or service. The POC adds only pinned `websockets==15.0.1` for the documented lower-level Deepgram API; it does not add the Deepgram SDK. The existing substantive Nebius/NVIDIA path is untouched. The [transcription-component investigation](phase-3-transcription-options.md#implementation-and-preflight-evidence--september-27-2026) records the provisional selection, implementation shape, live preflight, privacy limits, and pending scored evidence.
 
 ## Event schema 1.0
 
@@ -36,7 +38,7 @@ No dependencies or services were added. The existing substantive Nebius/NVIDIA p
 
 ### Counters and ordering
 
-`sequence` and `revision` are **internal counters owned by our adapter/model boundary**, not requirements on provider output. A future adapter must normalize its provider's callbacks, IDs, duplicates, and revisions before downstream consumption. This slice validates normalized counters; it does not implement a provider normalizer or silently repair input.
+`sequence` and `revision` are **internal counters owned by our adapter/model boundary**, not requirements on provider output. The provisional Deepgram adapter normalizes its provider's callbacks, IDs and revisions before downstream consumption. The contract validates normalized counters and still does not silently repair invalid input.
 
 A start event has sequence `0` and observation offset `0`. Every subsequent event must have the next consecutive sequence. All event kinds consume a sequence. Observation offsets must not decrease, but equal offsets are valid; sequence breaks ties. Audio timing does not determine delivery order.
 
@@ -101,12 +103,12 @@ The fixture reader loads a whole small file; it is not a bounded production uplo
 
 ## Verification and remaining Phase 3 work
 
-All **74 repository tests passed**: 41 existing tests and 33 transcript tests. Tests verify canonical UTC serialization, strict schema checks, corrected/final evolution, first-observed order, atomic rejection, stream/session isolation, degraded/failure behavior, truncated input, replay provenance, UTF-8 handling and deterministic fixture-to-state replay. Standard-library `trace` line coverage reports model 100.0%, replay 100.0%, and stream 98.6%; this is line coverage, not branch coverage. See [test evidence](testing/transcript-replay.tdd.md) for commands, checkpoint history, and limitations.
+The original contract checkpoint passed 74 repository tests: 41 existing tests and 33 transcript tests. The current POC branch passes **120 tests**, adding 10 deterministic adapter tests and 13 experiment/configuration/measurement tests to the repository's current 97-test baseline. Tests cover initial/revised/final callbacks, shorter-final remainder creation, provider timestamps, empty callbacks, malformed input, failure, reconnect, old-stream rejection, final-to-partial rejection, exact request options, safe key loading, capture conversion, WER/term recall, aggregate-only evidence, exclusion of empty callbacks from latency metrics, output cleanup, trial orchestration, transport callbacks, and monotonic closure timing. Standard-library trace reports 88.6% line coverage for the adapter and 80.8% for the live harness. The [POC TDD report](testing/deepgram-poc.tdd.md) records RED/GREEN checkpoints and known live-evidence gaps.
 
 Remaining work retains the roadmap's intended scope:
 
-1. Verify local audio-capture permissions, device selection, consent/privacy expectations, and provider account controls. Candidate behavior and documented privacy terms are compared in the [component investigation](phase-3-transcription-options.md), but none has been verified live.
-2. Implement the bounded provisional Deepgram POC: capture/streaming plus an adapter that normalizes callbacks, timing, internal counters, identities, partial/final corrections and failure/recovery into this contract. Determine transport, backpressure, loss detection, cancellation and clock-alignment policies from actual behavior.
-3. Run the documented presentation trials and record delay, accuracy, partial-result stability and failure behavior, with limitations. Replay is not a substitute for this live gate evidence.
+1. Run Trial A with the fixed script near-field and Trial B with the same script at realistic presentation distance/ordinary room noise; record fixed-threshold WER, technical-term recall, partial revisions, endpointing, and local-cursor latency.
+2. Run the 60-second spoken Trial C with one intentional WebSocket interruption. The transport-only preflight already proves failed closure and a fresh reconnect, but it is not the scored spoken trial.
+3. Complete final aggregate privacy/secret/diff/link verification after the trials and record whether every exit criterion passes. Exact account balance/free-credit origin remains unavailable because the configured key lacks billing scopes and no authenticated console session is available.
 
-The approved model and file plan were retained. Decoder strictness for invalid/unknown timestamp offsets is a narrowly scoped implementation clarification supporting the approved known, timezone-aware start instant. The provisional selection does not alter this contract. No Phase 4 integration or Phase 5 application state was introduced. The Phase 3 exit gate remains incomplete.
+The approved model and file plan were retained. Decoder strictness for invalid/unknown timestamp offsets is a narrowly scoped implementation clarification supporting the approved known, timezone-aware start instant. The provisional adapter does not alter this contract. No Phase 4 integration or Phase 5 application state was introduced. The Phase 3 exit gate remains incomplete pending realistic spoken evidence.

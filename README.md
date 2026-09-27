@@ -13,7 +13,7 @@ The project is being built for the **Nebius x NVIDIA Global AI Hackathon**, targ
 - [Phase 1 stack discovery record](docs/phase-1-stack-discovery.md)
 - [Token Factory limits, pricing, billing, and operational constraints](docs/phase-1-token-factory-constraints.md)
 - [Phase 2 representation, Google Slides ingestion, and snapshot comparison](docs/phase-2-presentation-representation.md)
-- [Phase 3 transcript events, accumulator, and deterministic replay](docs/phase-3-speech-transcription.md)
+- [Phase 3 transcript contract, Deepgram POC, and deterministic replay](docs/phase-3-speech-transcription.md)
 - [Foundation completion audit and remaining account/provider follow-up](docs/foundation-completion-audit.md)
 - [Model comparison, scheduled load and context-boundary measurements](experiments/FOUNDATION-TRIAL.md)
 
@@ -23,9 +23,9 @@ The project is being built for the **Nebius x NVIDIA Global AI Hackathon**, targ
 
 The original semantic benchmark remains intact. A new [54-request comparison](experiments/FOUNDATION-TRIAL.md) tested extraction, longer transcript coverage and reminder selection: Super and Ultra each passed 18/18; Nano passed 14/18. Super remains provisional. A subsequent 45-request scheduled trial returned all expected outputs, but missed one of 36 five-second coverage deadlines. That failed timing result is preserved. The report distinguishes minimal observed billing from reproducible experiment cost estimates and records bounded context-reservation checks.
 
-Phase 2 retains schema 1.0 ingestion, verified live Google Slides snapshots and conservative snapshot comparison. It now also provides source-grounded concept drafts in a separate snapshot-bound artifact. Drafts retain exact supporting quotes, require presenter review, and explicitly flag unsupported or missing content. The [foundation audit](docs/foundation-completion-audit.md) covers source formats and edge-case limits. All **97 repository tests pass**; no integrated application, visual understanding or live control is claimed.
+Phase 2 retains schema 1.0 ingestion, verified live Google Slides snapshots and conservative snapshot comparison. It now also provides source-grounded concept drafts in a separate snapshot-bound artifact. Drafts retain exact supporting quotes, require presenter review, and explicitly flag unsupported or missing content. The [foundation audit](docs/foundation-completion-audit.md) covers source formats and edge-case limits. Its 97-test foundation baseline remains intact; the current Phase 3 branch passes **120 repository tests**. No integrated application, visual understanding or live control is claimed.
 
-The existing Phase 3 transcript contract and deterministic replay remain available, but no microphone or transcription provider is implemented yet. Phase 3 work now proceeds from this bounded foundation. See the [contract and runnable replay example](docs/phase-3-speech-transcription.md#deterministic-replay).
+The Phase 3 transcript contract and deterministic replay remain available, and the current bounded branch adds a provisional Deepgram adapter plus an aggregate-only in-memory microphone trial harness. Authenticated capture/connectivity and reconnect preflights pass; the realistic scored spoken trials remain pending, so Phase 3 is not complete. See the [contract and runnable replay example](docs/phase-3-speech-transcription.md#deterministic-replay) and [POC evidence](docs/phase-3-transcription-options.md#implementation-and-preflight-evidence--september-27-2026).
 
 ## Google Slides prototype
 
