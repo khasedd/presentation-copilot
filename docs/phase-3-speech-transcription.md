@@ -10,7 +10,7 @@ Implemented and verified September 26, 2026, on `codex/phase-3-transcript-contra
 - `stream.py` owns one ordered transcript stream and validates cross-event transitions.
 - `replay.py` reads small UTF-8 JSON event arrays and feeds those events through the same accumulator future adapters will use.
 
-No dependencies or services were added. The existing substantive Nebius/NVIDIA path is untouched. Live transcription selection still requires the roadmap's technical, privacy, licensing and current hackathon-rules investigation; this slice makes no new provider/compliance claim.
+No dependencies or services were added. The existing substantive Nebius/NVIDIA path is untouched. This contract slice made no provider/compliance claim. The subsequent [transcription-component investigation](phase-3-transcription-options.md) records the provisional POC selection without implementing it.
 
 ## Event schema 1.0
 
@@ -105,9 +105,8 @@ All **74 repository tests passed**: 41 existing tests and 33 transcript tests. T
 
 Remaining work retains the roadmap's intended scope:
 
-1. Investigate audio-capture permissions, device selection, consent/privacy expectations, and permitted transcription components.
-2. Investigate/select a technically and legally suitable live transcription path, including current hackathon compatibility. No provider is selected here.
-3. Implement capture/streaming and an adapter that normalizes provider callbacks, timing, internal counters, identities, partial/final corrections and failure/recovery into this contract. Determine transport, backpressure, loss detection, cancellation and clock-alignment policies from actual provider behavior.
-4. Run realistic presentation trials and record delay, accuracy, partial-result stability and failure behavior, with limitations. Replay is not a substitute for this live gate evidence.
+1. Verify local audio-capture permissions, device selection, consent/privacy expectations, and provider account controls. Candidate behavior and documented privacy terms are compared in the [component investigation](phase-3-transcription-options.md), but none has been verified live.
+2. Implement the bounded provisional Deepgram POC: capture/streaming plus an adapter that normalizes callbacks, timing, internal counters, identities, partial/final corrections and failure/recovery into this contract. Determine transport, backpressure, loss detection, cancellation and clock-alignment policies from actual behavior.
+3. Run the documented presentation trials and record delay, accuracy, partial-result stability and failure behavior, with limitations. Replay is not a substitute for this live gate evidence.
 
-The approved model and file plan were retained. Decoder strictness for invalid/unknown timestamp offsets is a narrowly scoped implementation clarification supporting the approved known, timezone-aware start instant. No Phase 4 integration or Phase 5 application state was introduced. The Phase 3 exit gate remains incomplete.
+The approved model and file plan were retained. Decoder strictness for invalid/unknown timestamp offsets is a narrowly scoped implementation clarification supporting the approved known, timezone-aware start instant. The provisional selection does not alter this contract. No Phase 4 integration or Phase 5 application state was introduced. The Phase 3 exit gate remains incomplete.
