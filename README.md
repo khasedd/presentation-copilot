@@ -14,14 +14,18 @@ The project is being built for the **Nebius x NVIDIA Global AI Hackathon**, targ
 - [Token Factory limits, pricing, billing, and operational constraints](docs/phase-1-token-factory-constraints.md)
 - [Phase 2 representation, Google Slides ingestion, and snapshot comparison](docs/phase-2-presentation-representation.md)
 - [Phase 3 transcript events, accumulator, and deterministic replay](docs/phase-3-speech-transcription.md)
+- [Foundation completion audit and remaining account/provider follow-up](docs/foundation-completion-audit.md)
+- [Model comparison, scheduled load and context-boundary measurements](experiments/FOUNDATION-TRIAL.md)
 
 ## Status
 
-An isolated semantic-coverage proof of concept now verifies four controlled transcript cases through Nebius Token Factory and NVIDIA Nemotron 3 Super. It is not application architecture or a production-quality evaluation. A [Phase 1 benchmark](experiments/BENCHMARK.md) now compares all four available NVIDIA model IDs on the unchanged cases, with latency and token usage recorded. Super is the only model that passed all 12 attempts under the existing token cap. The [September 17 documentation review](docs/phase-1-token-factory-constraints.md) records public pricing, quotas, context limits, billing rules, and operational risks. Account-specific limits and credit deductions, realistic load/quality evaluation, broader stack discovery, and presentation integration remain open.
+**Phases 0–2 are complete for the project foundation, and Phase 3 is the next active phase.** Account/provider questions remain explicitly unverified non-blocking operational follow-ups; the completed Phase 1 foundation and its passed exit gate remain unchanged.
 
-Phase 2 now provides schema 1.0 snapshots, a read-only Google Slides adapter, explicit extraction limitations, and deterministic reorder/change comparison. All 41 offline tests pass. Baseline live ingestion passed 189 source-field checks, and an owner-approved mutation pass verified reorder, text/notes edits, addition, removal and a content-preserving replacement ID. Duplicate fallback ambiguity was verified separately in memory while preserving the live pair. The Phase 2 exit gate passes; unchecked concept extraction and broader evaluation work remain open. UI and live presentation control are not part of this foundation.
+The original semantic benchmark remains intact. A new [54-request comparison](experiments/FOUNDATION-TRIAL.md) tested extraction, longer transcript coverage and reminder selection: Super and Ultra each passed 18/18; Nano passed 14/18. Super remains provisional. A subsequent 45-request scheduled trial returned all expected outputs, but missed one of 36 five-second coverage deadlines. That failed timing result is preserved. The report distinguishes minimal observed billing from reproducible experiment cost estimates and records bounded context-reservation checks.
 
-Phase 3's first slice now provides schema 1.0 transcript events, strict ordering/revision and stream-boundary validation, and synthetic JSON replay through a transcript-only accumulator. All 74 repository tests pass (41 existing, 33 new). No microphone or transcription provider is implemented, and the Phase 3 gate remains incomplete. See the [contract and runnable replay example](docs/phase-3-speech-transcription.md#deterministic-replay) and [test evidence](docs/testing/transcript-replay.tdd.md).
+Phase 2 retains schema 1.0 ingestion, verified live Google Slides snapshots and conservative snapshot comparison. It now also provides source-grounded concept drafts in a separate snapshot-bound artifact. Drafts retain exact supporting quotes, require presenter review, and explicitly flag unsupported or missing content. The [foundation audit](docs/foundation-completion-audit.md) covers source formats and edge-case limits. All **97 repository tests pass**; no integrated application, visual understanding or live control is claimed.
+
+The existing Phase 3 transcript contract and deterministic replay remain available, but no microphone or transcription provider is implemented yet. Phase 3 work now proceeds from this bounded foundation. See the [contract and runnable replay example](docs/phase-3-speech-transcription.md#deterministic-replay).
 
 ## Google Slides prototype
 
