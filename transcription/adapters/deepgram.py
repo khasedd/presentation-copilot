@@ -25,6 +25,7 @@ from transcription.stream import TranscriptAccumulator
 
 PROVIDER = "deepgram-nova-3"
 _NO_OP_TYPES = frozenset({"Metadata", "SpeechStarted", "UtteranceEnd"})
+_WORD_BOUNDARY_TOLERANCE_MS = 1
 
 
 class DeepgramAdapterError(ValueError):
@@ -96,21 +97,25 @@ def _parse_words(value: object, result_start_ms: int, result_end_ms: int
     if not isinstance(value, list):
         raise _error()
     words: list[_Word] = []
-    previous_end = result_start_ms
     for raw in value:
         if not isinstance(raw, dict):
             raise _error()
-        text = raw.get("punctuated_word", raw.get("word"))
+        text = raw.get("punctuated_word")
+        if not isinstance(text, str) or not text:
+            text = raw.get("word")
         if not isinstance(text, str) or not text:
             raise _error()
         start_ms = _milliseconds(raw.get("start"))
         end_ms = _milliseconds(raw.get("end"))
-        if not result_start_ms <= start_ms <= end_ms <= result_end_ms:
+        if (start_ms > end_ms
+                or start_ms < result_start_ms - _WORD_BOUNDARY_TOLERANCE_MS
+                or end_ms > result_end_ms + _WORD_BOUNDARY_TOLERANCE_MS):
             raise _error()
-        if start_ms < previous_end:
-            raise _error()
+        # Independently rounded provider floats can cross a result boundary by
+        # one millisecond. Result timing remains authoritative for the event.
+        start_ms = max(start_ms, result_start_ms)
+        end_ms = min(end_ms, result_end_ms)
         words.append(_Word(text=text, start_ms=start_ms, end_ms=end_ms))
-        previous_end = end_ms
     return tuple(words)
 
 
