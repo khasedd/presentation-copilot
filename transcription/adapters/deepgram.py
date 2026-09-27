@@ -242,11 +242,16 @@ class DeepgramAdapter:
         active = self._active
         if active is None:
             raise _error("invalid_transition")
-        remainder_words = tuple(word for word in active.words
-                                if word.end_ms > result.end_ms)
-        if (not remainder_words
-                or remainder_words[0].start_ms < result.end_ms
-                or not all(word.text for word in remainder_words)):
+        remainder_words = tuple(
+            _Word(
+                text=word.text,
+                start_ms=max(word.start_ms, result.end_ms),
+                end_ms=word.end_ms,
+            )
+            for word in active.words
+            if word.end_ms > result.end_ms
+        )
+        if not remainder_words or not all(word.text for word in remainder_words):
             raise _error("shorter_final_incompatible")
         remainder_text = " ".join(word.text for word in remainder_words)
 
