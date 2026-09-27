@@ -120,6 +120,34 @@ class DeepgramAdapterTests(unittest.TestCase):
             observed_at_ms=1000)[0].payload
         self.assertEqual((update.start_ms, update.end_ms), (125, 876))
 
+    def test_word_timing_overlap_does_not_invalidate_result_range(self):
+        update = self.adapter.accept(result(
+            "alpha beta", 0, 1,
+            words=[word("alpha", 0, 0.6), word("beta", 0.55, 1)]),
+            observed_at_ms=1100)[0].payload
+        self.assertEqual((update.text, update.start_ms, update.end_ms),
+                         ("alpha beta", 0, 1000))
+
+    def test_one_millisecond_word_boundary_drift_is_clipped(self):
+        update = self.adapter.accept(result(
+            "timed", 1, 1,
+            words=[word("timed", 0.9994, 2.0006)]),
+            observed_at_ms=2100)[0].payload
+        self.assertEqual((update.start_ms, update.end_ms), (1000, 2000))
+
+    def test_empty_punctuated_word_falls_back_to_raw_word_for_remainder(self):
+        first = word("alpha", 0, 1)
+        second = word("beta", 1, 2)
+        second["punctuated_word"] = ""
+        self.adapter.accept(result(
+            "alpha beta", 0, 2, words=[first, second]),
+            observed_at_ms=2100)
+
+        emitted = self.adapter.accept(result(
+            "alpha", 0, 1, final=True, words=[first]),
+            observed_at_ms=2200)
+        self.assertEqual(emitted[1].payload.text, "beta")
+
     def test_empty_and_non_result_messages_are_no_ops(self):
         messages = [
             {"type": "Metadata", "request_id": "sanitized"},
