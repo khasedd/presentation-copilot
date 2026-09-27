@@ -13,6 +13,7 @@ dist/
 build/
 coverage/
 .cache/
+.venv/
 __pycache__/
 *.py[cod]
 
@@ -25,6 +26,7 @@ Thumbs.db
 
 # Private presentation snapshots and raw live-check artifacts
 presentation-output/
+deepgram-output/
 
 # Private account billing evidence; exclude from future commits
 /docs/evidence/phase-1/nebius-token-factory-billing.png

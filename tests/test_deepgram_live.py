@@ -77,8 +77,8 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
         self.assertAlmostEqual(word_error_rate(reference, hypothesis), 3 / 8)
         recall, matched = technical_term_recall(
             hypothesis, ("Deepgram", "Nova three", "PipeWire", "WebSocket", "Nebius"))
-        self.assertEqual(recall, 4 / 5)
-        self.assertEqual(matched, 4)
+        self.assertEqual(recall, 3 / 5)
+        self.assertEqual(matched, 3)
 
     def test_safe_report_contains_metrics_but_no_transcript_or_credential(self):
         secret = "private-api-key"

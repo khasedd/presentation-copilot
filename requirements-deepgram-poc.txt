@@ -1,0 +1,2 @@
+# Experimental Phase 3 WebSocket transport. Deepgram SDK is intentionally not used.
+websockets==15.0.1
