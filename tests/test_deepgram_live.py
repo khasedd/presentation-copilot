@@ -3,11 +3,14 @@ import json
 import os
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from experiments.deepgram_live import (
     ListenConfig,
+    _StreamEvidence,
+    _update_evidence,
     audio_cursor_ms,
     build_listen_url,
     capture_command,
@@ -16,6 +19,7 @@ from experiments.deepgram_live import (
     technical_term_recall,
     word_error_rate,
 )
+from transcription.adapters.deepgram import DeepgramAdapter
 
 
 class DeepgramLiveConfigurationTests(unittest.TestCase):
@@ -71,6 +75,28 @@ class DeepgramLiveConfigurationTests(unittest.TestCase):
 
 
 class DeepgramLiveMeasurementTests(unittest.TestCase):
+    def test_empty_result_does_not_create_latency_or_endpoint_samples(self):
+        adapter = DeepgramAdapter(
+            session_id="session",
+            source_id="microphone",
+            started_at=datetime(2026, 9, 27, tzinfo=timezone.utc),
+            stream_id="stream",
+        )
+        evidence = _StreamEvidence(stream_id="stream", adapter=adapter)
+        message = {
+            "type": "Results",
+            "start": 0,
+            "duration": 0.5,
+            "is_final": True,
+            "speech_final": True,
+            "channel": {"alternatives": [{"transcript": "", "words": []}]},
+        }
+        events = adapter.accept(message, observed_at_ms=600)
+        _update_evidence(evidence, message, events, 100.0)
+        self.assertEqual(events, ())
+        self.assertEqual(evidence.endpoint_events, 0)
+        self.assertEqual(evidence.final_lags_ms, [])
+
     def test_word_error_rate_and_technical_term_recall_are_deterministic(self):
         reference = "Deepgram Nova three uses PipeWire and a WebSocket."
         hypothesis = "Deepgram Nova tree uses PipeWire and WebSocket extra."
