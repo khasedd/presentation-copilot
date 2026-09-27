@@ -6,6 +6,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
+from unittest.mock import patch
 
 from experiments.deepgram_live import (
     ListenConfig,
@@ -15,6 +16,7 @@ from experiments.deepgram_live import (
     build_listen_url,
     capture_command,
     load_deepgram_key,
+    main,
     safe_trial_report,
     technical_term_recall,
     word_error_rate,
@@ -145,6 +147,24 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
         self.assertEqual(report["latency_ms"]["interim"]["sample_count"], 2)
         self.assertEqual(report["latency_ms"]["final"]["p95"], 900.0)
         self.assertAlmostEqual(report["estimated_cost_usd"], 0.007296)
+
+
+class DeepgramLiveCliTests(unittest.TestCase):
+    def test_failed_trial_removes_reserved_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "deepgram-output" / "failed.json"
+            with patch.dict(os.environ, {"DEEPGRAM_API_KEY": "local-test-key"}), \
+                    patch("experiments.deepgram_live.OUTPUT_ROOT", output.parent), \
+                    patch("experiments.deepgram_live.run_trial",
+                          side_effect=RuntimeError("simulated failure")):
+                with self.assertRaises(RuntimeError):
+                    main([
+                        "--trial", "A",
+                        "--duration", "1",
+                        "--source", "internal-mic",
+                        "--output", str(output),
+                    ])
+            self.assertFalse(output.exists())
 
 
 if __name__ == "__main__":
