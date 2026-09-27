@@ -25,7 +25,6 @@ from transcription.stream import TranscriptAccumulator
 
 PROVIDER = "deepgram-nova-3"
 _NO_OP_TYPES = frozenset({"Metadata", "SpeechStarted", "UtteranceEnd"})
-_WORD_BOUNDARY_TOLERANCE_MS = 1
 
 
 class DeepgramAdapterError(ValueError):
@@ -66,6 +65,13 @@ class _Result:
 def _error(code: str = "invalid_provider_message") -> DeepgramAdapterError:
     messages = {
         "invalid_provider_message": "Deepgram message has an unsupported shape",
+        "invalid_result_timing": "Deepgram result has invalid timing",
+        "invalid_result_finality": "Deepgram result has invalid finality",
+        "invalid_result_channel": "Deepgram result has an invalid channel",
+        "invalid_result_alternatives": (
+            "Deepgram result has invalid alternatives"
+        ),
+        "invalid_result_transcript": "Deepgram result has invalid text",
         "invalid_transition": "Deepgram message contradicts the active segment",
         "shorter_final_incompatible": (
             "Shorter Deepgram final cannot be normalized from available timing"
@@ -81,64 +87,85 @@ def _counter(value: object) -> int:
     return value
 
 
-def _seconds(value: object) -> float:
+def _seconds(
+    value: object,
+    *,
+    error_code: str = "invalid_provider_message",
+) -> float:
     if (not isinstance(value, (int, float)) or isinstance(value, bool)
             or not math.isfinite(value) or value < 0):
-        raise _error()
+        raise _error(error_code)
     return float(value)
 
 
-def _milliseconds(value: object) -> int:
-    return int(round(_seconds(value) * 1000))
+def _milliseconds(
+    value: object,
+    *,
+    error_code: str = "invalid_provider_message",
+) -> int:
+    return int(round(_seconds(value, error_code=error_code) * 1000))
 
 
 def _parse_words(value: object, result_start_ms: int, result_end_ms: int
                  ) -> tuple[_Word, ...]:
+    # Word objects are optional alignment hints. A valid result-level transcript
+    # must not be discarded because one hint is absent or internally noisy.
     if not isinstance(value, list):
-        raise _error()
+        return ()
     words: list[_Word] = []
     for raw in value:
         if not isinstance(raw, dict):
-            raise _error()
+            continue
         text = raw.get("punctuated_word")
         if not isinstance(text, str) or not text:
             text = raw.get("word")
         if not isinstance(text, str) or not text:
-            raise _error()
-        start_ms = _milliseconds(raw.get("start"))
-        end_ms = _milliseconds(raw.get("end"))
-        if (start_ms > end_ms
-                or start_ms < result_start_ms - _WORD_BOUNDARY_TOLERANCE_MS
-                or end_ms > result_end_ms + _WORD_BOUNDARY_TOLERANCE_MS):
-            raise _error()
-        # Independently rounded provider floats can cross a result boundary by
-        # one millisecond. Result timing remains authoritative for the event.
+            continue
+        try:
+            start_ms = _milliseconds(raw.get("start"))
+            end_ms = _milliseconds(raw.get("end"))
+        except DeepgramAdapterError:
+            continue
+        if start_ms > end_ms:
+            continue
+        # Result timing remains authoritative. Clipping also absorbs provider
+        # float rounding and provisional word ranges that straddle the result.
         start_ms = max(start_ms, result_start_ms)
         end_ms = min(end_ms, result_end_ms)
+        if start_ms >= end_ms:
+            continue
         words.append(_Word(text=text, start_ms=start_ms, end_ms=end_ms))
     return tuple(words)
 
 
-def _parse_result(message: dict[str, object]) -> _Result:
-    start_seconds = _seconds(message.get("start"))
-    duration_seconds = _seconds(message.get("duration"))
-    start_ms = _milliseconds(start_seconds)
-    end_ms = _milliseconds(start_seconds + duration_seconds)
+def _parse_result(message: dict[str, object]) -> _Result | None:
+    start_seconds = _seconds(
+        message.get("start"), error_code="invalid_result_timing")
+    duration_seconds = _seconds(
+        message.get("duration"), error_code="invalid_result_timing")
+    start_ms = _milliseconds(
+        start_seconds, error_code="invalid_result_timing")
+    end_ms = _milliseconds(
+        start_seconds + duration_seconds,
+        error_code="invalid_result_timing",
+    )
     is_final = message.get("is_final")
     if not isinstance(is_final, bool):
-        raise _error()
+        raise _error("invalid_result_finality")
     channel = message.get("channel")
     if not isinstance(channel, dict):
-        raise _error()
+        raise _error("invalid_result_channel")
     alternatives = channel.get("alternatives")
-    if not isinstance(alternatives, list) or not alternatives:
-        raise _error()
+    if not isinstance(alternatives, list):
+        raise _error("invalid_result_alternatives")
+    if not alternatives:
+        return None
     alternative = alternatives[0]
     if not isinstance(alternative, dict):
-        raise _error()
+        raise _error("invalid_result_alternatives")
     text = alternative.get("transcript")
     if not isinstance(text, str):
-        raise _error()
+        raise _error("invalid_result_transcript")
     words = _parse_words(alternative.get("words", []), start_ms, end_ms)
     return _Result(text=text, start_ms=start_ms, end_ms=end_ms,
                    is_final=is_final, words=words)
@@ -309,6 +336,8 @@ class DeepgramAdapter:
         if message_type != "Results":
             raise _error()
         result = _parse_result(message)
+        if result is None:
+            return ()
         if result.text == "" and not result.words:
             return ()
 
