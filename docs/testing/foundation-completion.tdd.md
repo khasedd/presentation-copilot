@@ -18,9 +18,9 @@ Source: the owner's request to finish unchecked Phase 0–2 work before further 
 
 The existing suite passed **74 tests** before changes.
 
-1. `python3 -m unittest discover -s tests -p test_concept_extraction.py -v` failed with the intended missing `presentation.concepts` module. RED commit: `0b0e678`. Implemented source-grounded drafts; `python3 -m unittest discover -s tests -q` passed **83 tests**. GREEN commit: `a5fcd0b`.
-2. `python3 -m unittest discover -s tests -p test_foundation_probe.py -q` failed with the intended missing `experiments.foundation_probe` module. RED commit: `3c33cf8`. Implemented the bounded workload runner; the full suite passed **90 tests**. GREEN commit: `fcfa17c`.
-3. Added CLI/resource verification; full suite passed **93 tests**. Then `python3 -m unittest discover -s tests -p test_foundation_load.py -q` failed with the intended missing load module. RED commit: `d21a0f9`. Implemented scheduled queue/deadline measurement; the full suite passed **95 tests**. GREEN commit: `6ed3cbc`.
+1. `python3 -m unittest discover -s tests -p test_concept_extraction.py -v` failed with the intended missing `presentation.concepts` module. RED commit: `f31198d`. Implemented source-grounded drafts; `python3 -m unittest discover -s tests -q` passed **83 tests**. GREEN commit: `072a977`.
+2. `python3 -m unittest discover -s tests -p test_foundation_probe.py -q` failed with the intended missing `experiments.foundation_probe` module. RED commit: `bae12d1`. Implemented the bounded workload runner; the full suite passed **90 tests**. GREEN commit: `6f0497d`.
+3. Added CLI/resource verification; full suite passed **93 tests**. Then `python3 -m unittest discover -s tests -p test_foundation_load.py -q` failed with the intended missing load module. RED commit: `e2952e4`. Implemented scheduled queue/deadline measurement; the full suite passed **95 tests**. GREEN commit: `03c0366`.
 4. Added load CLI evidence-preservation checks. Final full suite: **97 tests pass** (74 existing, 23 new).
 
 These compile/import RED signals exercised newly specified missing interfaces, not unrelated test-setup or dependency failures. Checkpoints are preserved on `codex/close-foundation-gaps`; this report also preserves their evidence if a future merge squashes them.
