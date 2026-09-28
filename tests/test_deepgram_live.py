@@ -404,8 +404,10 @@ class DeepgramLiveCliTests(unittest.TestCase):
         self.assertEqual(run.await_args_list[0].kwargs["duration_seconds"], 5)
         self.assertTrue(report["behavior"]["reconnected"])
 
+        spoken = evidence("only")
+        spoken.completion_reason = "speech_complete"
         with patch("experiments.deepgram_live._run_stream",
-                   new_callable=AsyncMock, return_value=evidence("only")) as run:
+                   new_callable=AsyncMock, return_value=spoken) as run:
             report = asyncio.run(run_trial(
                 trial="A",
                 key="local-test-key",
@@ -416,9 +418,13 @@ class DeepgramLiveCliTests(unittest.TestCase):
             ))
         self.assertEqual(run.await_count, 1)
         self.assertFalse(run.await_args.kwargs["interrupt"])
+        self.assertIsInstance(
+            run.await_args.kwargs["completion"],
+            deepgram_live._SpeechCompletion,
+        )
         self.assertFalse(report["behavior"]["reconnected"])
 
-        for trial, duration in (("D", 1), ("A", 0), ("A", 121)):
+        for trial, duration in (("D", 1), ("A", 0), ("A", 241)):
             with self.subTest(trial=trial, duration=duration), \
                     self.assertRaises(ValueError):
                 asyncio.run(run_trial(

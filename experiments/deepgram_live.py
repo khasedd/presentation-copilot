@@ -28,7 +28,9 @@ from transcription.model import SegmentUpdated
 LISTEN_URL = "wss://api.deepgram.com/v1/listen"
 OUTPUT_ROOT = Path("deepgram-output")
 PRICE_PER_MINUTE_USD = 0.0048
-MAX_TRIAL_SECONDS = 120
+MAX_TRIAL_SECONDS = 240
+TRIAL_COMPLETION_SILENCE_SECONDS = 8.0
+TRIAL_MINIMUM_FINAL_TOKEN_RATIO = 0.80
 
 PRESENTATION_SCRIPT = """Today I am demonstrating Presentation Copilot, a
 privacy-conscious assistant for live technical talks. Audio enters through
@@ -126,6 +128,7 @@ class _StreamEvidence:
     timestamps_monotonic: bool = True
     last_final_end_ms: int = 0
     disconnect_detected: bool = False
+    completion_reason: str | None = None
 
     @property
     def final_text(self) -> str:
@@ -134,6 +137,42 @@ class _StreamEvidence:
             return ""
         return " ".join(segment.text for segment in state.segments
                         if segment.status == "final")
+
+
+@dataclass
+class _SpeechCompletion:
+    """Recognize a completed scripted read without retaining microphone audio."""
+
+    minimum_final_tokens: int
+    silence_seconds: float
+    endpoint_observed_at: float | None = None
+
+    def observe(self, message: Mapping[str, object], *, observed_at: float) -> None:
+        message_type = message.get("type")
+        if message_type == "SpeechStarted":
+            self.endpoint_observed_at = None
+            return
+        if message_type == "UtteranceEnd":
+            self.endpoint_observed_at = observed_at
+            return
+        if message_type != "Results":
+            return
+
+        channel = message.get("channel")
+        alternatives = channel.get("alternatives") if isinstance(channel, dict) else None
+        first = alternatives[0] if isinstance(alternatives, list) and alternatives else None
+        transcript = first.get("transcript") if isinstance(first, dict) else None
+        if isinstance(transcript, str) and transcript.strip():
+            self.endpoint_observed_at = None
+        if message.get("speech_final") is True:
+            self.endpoint_observed_at = observed_at
+
+    def ready(self, *, observed_at: float, final_text: str) -> bool:
+        return (
+            self.endpoint_observed_at is not None
+            and observed_at - self.endpoint_observed_at >= self.silence_seconds
+            and len(_tokens(final_text)) >= self.minimum_final_tokens
+        )
 
 
 def load_deepgram_key(
@@ -370,6 +409,7 @@ async def _run_stream(
     config: ListenConfig,
     started_at: datetime,
     interrupt: bool,
+    completion: _SpeechCompletion | None = None,
 ) -> _StreamEvidence:
     try:
         import websockets
@@ -415,7 +455,15 @@ async def _run_stream(
         async def sender() -> None:
             nonlocal intentional_disconnect
             deadline = stream_started + duration_seconds
-            while time.monotonic() < deadline:
+            while True:
+                now = time.monotonic()
+                if completion is not None and completion.ready(
+                        observed_at=now, final_text=evidence.final_text):
+                    evidence.completion_reason = "speech_complete"
+                    break
+                if now >= deadline:
+                    evidence.completion_reason = "max_duration"
+                    break
                 chunk = await capture.stdout.readexactly(config.chunk_bytes)
                 await websocket.send(chunk)
                 sent_at = time.monotonic()
@@ -456,6 +504,8 @@ async def _run_stream(
                         0, round((time.monotonic() - stream_started) * 1000)))
                     continue
                 if message.get("type") in {"SpeechStarted", "UtteranceEnd"}:
+                    if completion is not None:
+                        completion.observe(message, observed_at=time.monotonic())
                     adapter.accept(message, observed_at_ms=max(
                         0, round((time.monotonic() - stream_started) * 1000)))
                     continue
@@ -468,6 +518,8 @@ async def _run_stream(
                     math.ceil(provider_end_ms),
                 )
                 events = adapter.accept(message, observed_at_ms=observed_ms)
+                if completion is not None:
+                    completion.observe(message, observed_at=observed_at)
                 lag = clock.lag_ms(provider_end_ms, observed_at)
                 _update_evidence(evidence, message, events, lag)
             await send_task
@@ -564,7 +616,7 @@ async def run_trial(
     if trial not in {"A", "B", "C"}:
         raise ValueError("Trial must be A, B, or C")
     if not 1 <= duration_seconds <= MAX_TRIAL_SECONDS:
-        raise ValueError("Trial duration must be between 1 and 120 seconds")
+        raise ValueError("Trial duration must be between 1 and 240 seconds")
     config = ListenConfig()
     session_id = f"deepgram-poc-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
     reference = PRESENTATION_SCRIPT if trial in {"A", "B"} else FAILURE_SCRIPT
@@ -584,11 +636,24 @@ async def run_trial(
         )
         streams.append(second)
     else:
-        streams.append(await _run_stream(
+        completion = _SpeechCompletion(
+            minimum_final_tokens=math.ceil(
+                len(_tokens(reference)) * TRIAL_MINIMUM_FINAL_TOKEN_RATIO),
+            silence_seconds=TRIAL_COMPLETION_SILENCE_SECONDS,
+        )
+        stream = await _run_stream(
             key=key, source=source, session_id=session_id,
             duration_seconds=duration_seconds, config=config,
             started_at=datetime.now(timezone.utc), interrupt=False,
-        ))
+            completion=completion,
+        )
+        if stream.completion_reason == "max_duration":
+            raise LiveExperimentError(
+                "Trial reached its safety limit before the presenter finished")
+        if stream.completion_reason != "speech_complete":
+            raise LiveExperimentError(
+                "Trial ended before presenter completion was confirmed")
+        streams.append(stream)
     return _combine_report(
         trial=trial,
         requested_duration=duration_seconds,
@@ -611,7 +676,10 @@ def _safe_output_path(path: Path) -> Path:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--trial", choices=("A", "B", "C"), required=True)
-    parser.add_argument("--duration", type=float, required=True)
+    parser.add_argument(
+        "--duration", type=float, required=True,
+        help="hard safety limit in seconds; A/B stop after confirmed end silence",
+    )
     parser.add_argument("--source", required=True)
     parser.add_argument("--native-format", default="48000 Hz, 2 channels, s16")
     parser.add_argument("--network-context", default="local network")
