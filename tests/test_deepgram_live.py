@@ -156,15 +156,15 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
 
     def test_word_error_counts_decompose_substitution_deletion_and_insertion(self):
         counts = deepgram_live.word_error_counts(
-            "alpha beta gamma delta",
-            "alpha wrong delta extra",
+            "alpha beta gamma delta epsilon zeta eta theta iota",
+            "alpha wrong gamma delta epsilon zeta theta iota extra",
         )
         self.assertEqual(counts.substitutions, 1)
         self.assertEqual(counts.deletions, 1)
         self.assertEqual(counts.insertions, 1)
-        self.assertEqual(counts.reference_tokens, 4)
-        self.assertEqual(counts.hypothesis_tokens, 4)
-        self.assertEqual(counts.wer, 0.75)
+        self.assertEqual(counts.reference_tokens, 9)
+        self.assertEqual(counts.hypothesis_tokens, 9)
+        self.assertEqual(counts.wer, 1 / 3)
 
     def test_audio_quality_is_aggregate_only_and_reports_level_continuity(self):
         config = ListenConfig(sample_rate=20, chunk_ms=100)
@@ -390,7 +390,7 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
     def test_word_error_rate_and_technical_term_recall_are_deterministic(self):
         reference = "Deepgram Nova three uses PipeWire and a WebSocket."
         hypothesis = "Deepgram Nova tree uses PipeWire and WebSocket extra."
-        self.assertAlmostEqual(word_error_rate(reference, hypothesis), 3 / 8)
+        self.assertAlmostEqual(word_error_rate(reference, hypothesis), 3 / 10)
         recall, matched = technical_term_recall(
             hypothesis, ("Deepgram", "Nova three", "PipeWire", "WebSocket", "Nebius"))
         self.assertEqual(recall, 3 / 5)
@@ -440,7 +440,8 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
         self.assertNotIn(secret, encoded)
         self.assertNotIn(reference, encoded)
         self.assertNotIn(hypothesis, encoded)
-        self.assertNotIn("transcript", encoded.lower())
+        self.assertNotIn('"recognized_text":', encoded.lower())
+        self.assertNotIn('"reference_text":', encoded.lower())
         self.assertEqual(report["configuration"]["transmitted_format"],
                          "16000 Hz, mono, linear16")
         self.assertEqual(report["configuration"]["chunk_ms"], 50)

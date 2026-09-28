@@ -17,6 +17,7 @@ import math
 import os
 from pathlib import Path
 import re
+import struct
 import time
 from typing import Mapping, Sequence
 from urllib.parse import urlencode
@@ -31,6 +32,20 @@ PRICE_PER_MINUTE_USD = 0.0048
 MAX_TRIAL_SECONDS = 240
 TRIAL_COMPLETION_SILENCE_SECONDS = 8.0
 TRIAL_MINIMUM_FINAL_TOKEN_RATIO = 0.80
+VERY_LOW_LEVEL_DBFS = -50.0
+
+NOVA3_KEYTERMS = (
+    "Presentation Copilot",
+    "PipeWire",
+    "WirePlumber",
+    "WebSocket",
+    "Deepgram",
+    "Nova-3",
+    "TranscriptEvent",
+    "Nebius Token Factory",
+    "NVIDIA Nemotron",
+    "Open Parakeet",
+)
 
 PRESENTATION_SCRIPT = """Today I am demonstrating Presentation Copilot, a
 privacy-conscious assistant for live technical talks. Audio enters through
@@ -95,6 +110,100 @@ class ListenConfig:
                 * self.chunk_ms // 1000)
 
 
+@dataclass(frozen=True)
+class WordErrorCounts:
+    substitutions: int
+    deletions: int
+    insertions: int
+    reference_tokens: int
+    hypothesis_tokens: int
+
+    @property
+    def wer(self) -> float:
+        if self.reference_tokens == 0:
+            raise ValueError("Reference text must contain at least one word")
+        errors = self.substitutions + self.deletions + self.insertions
+        return errors / self.reference_tokens
+
+
+@dataclass
+class _AudioQuality:
+    """Aggregate-only diagnostics for transmitted signed 16-bit PCM chunks."""
+
+    config: ListenConfig
+    sample_count: int = 0
+    sum_squares: int = 0
+    peak_absolute: int = 0
+    clipped_samples: int = 0
+    chunk_count: int = 0
+    very_low_level_chunks: int = 0
+    transmitted_bytes: int = 0
+
+    def observe(self, chunk: bytes) -> None:
+        if len(chunk) != self.config.chunk_bytes \
+                or len(chunk) % self.config.sample_width_bytes:
+            raise ValueError("Audio chunk does not match the transmitted format")
+        samples = [sample[0] for sample in struct.iter_unpack("<h", chunk)]
+        square_sum = sum(sample * sample for sample in samples)
+        peak = max((abs(sample) for sample in samples), default=0)
+        rms_level = math.sqrt(square_sum / len(samples)) / 32768 if samples else 0
+
+        self.sample_count += len(samples)
+        self.sum_squares += square_sum
+        self.peak_absolute = max(self.peak_absolute, peak)
+        self.clipped_samples += sum(abs(sample) >= 32767 for sample in samples)
+        self.chunk_count += 1
+        self.very_low_level_chunks += (
+            rms_level <= 10 ** (VERY_LOW_LEVEL_DBFS / 20))
+        self.transmitted_bytes += len(chunk)
+
+    def merge(self, other: _AudioQuality) -> None:
+        if other.config != self.config:
+            raise ValueError("Cannot combine different transmitted audio formats")
+        self.sample_count += other.sample_count
+        self.sum_squares += other.sum_squares
+        self.peak_absolute = max(self.peak_absolute, other.peak_absolute)
+        self.clipped_samples += other.clipped_samples
+        self.chunk_count += other.chunk_count
+        self.very_low_level_chunks += other.very_low_level_chunks
+        self.transmitted_bytes += other.transmitted_bytes
+
+    @staticmethod
+    def _dbfs(level: float) -> float | None:
+        return round(20 * math.log10(level), 3) if level > 0 else None
+
+    def summary(self) -> dict[str, float | int | bool | None]:
+        rms_level = (
+            math.sqrt(self.sum_squares / self.sample_count) / 32768
+            if self.sample_count else 0
+        )
+        peak_level = self.peak_absolute / 32768
+        expected_bytes = self.chunk_count * self.config.chunk_bytes
+        byte_sample_continuity = (
+            self.transmitted_bytes == expected_bytes
+            and self.transmitted_bytes
+            == self.sample_count * self.config.sample_width_bytes
+        )
+        return {
+            "rms_dbfs": self._dbfs(rms_level),
+            "peak_dbfs": self._dbfs(peak_level),
+            "clipping_fraction": (
+                round(self.clipped_samples / self.sample_count, 6)
+                if self.sample_count else None
+            ),
+            "very_low_level_chunk_fraction": (
+                round(self.very_low_level_chunks / self.chunk_count, 6)
+                if self.chunk_count else None
+            ),
+            "very_low_level_threshold_dbfs": VERY_LOW_LEVEL_DBFS,
+            "sample_count": self.sample_count,
+            "chunk_count": self.chunk_count,
+            "transmitted_bytes": self.transmitted_bytes,
+            "expected_transmitted_bytes": expected_bytes,
+            "byte_sample_continuity": byte_sample_continuity,
+        }
+
+
 @dataclass
 class _SentAudioClock:
     config: ListenConfig
@@ -129,6 +238,7 @@ class _StreamEvidence:
     last_final_end_ms: int = 0
     disconnect_detected: bool = False
     completion_reason: str | None = None
+    audio_quality: _AudioQuality | None = None
 
     @property
     def final_text(self) -> str:
@@ -200,19 +310,20 @@ def load_deepgram_key(
 
 
 def build_listen_url(config: ListenConfig = ListenConfig()) -> str:
-    query = {
-        "model": "nova-3",
-        "language": "en-US",
-        "encoding": "linear16",
-        "sample_rate": str(config.sample_rate),
-        "channels": str(config.channels),
-        "interim_results": "true",
-        "mip_opt_out": "true",
-        "endpointing": str(config.endpointing_ms),
-        "vad_events": "true",
-        "punctuate": "true",
-        "smart_format": "true",
-    }
+    query = [
+        ("model", "nova-3"),
+        ("language", "en-US"),
+        ("encoding", "linear16"),
+        ("sample_rate", str(config.sample_rate)),
+        ("channels", str(config.channels)),
+        ("interim_results", "true"),
+        ("mip_opt_out", "true"),
+        ("endpointing", str(config.endpointing_ms)),
+        ("vad_events", "true"),
+        ("punctuate", "true"),
+        ("smart_format", "true"),
+    ]
+    query.extend(("keyterm", keyterm) for keyterm in NOVA3_KEYTERMS)
     return LISTEN_URL + "?" + urlencode(query)
 
 
@@ -239,33 +350,164 @@ def audio_cursor_ms(byte_count: int, config: ListenConfig = ListenConfig()) -> f
     return byte_count * 1000 / bytes_per_second
 
 
+_COMPOUND_EQUIVALENTS = {
+    "pipewire": ("pipe", "wire"),
+    "wireplumber": ("wire", "plumber"),
+    "websocket": ("web", "socket"),
+    "transcriptevent": ("transcript", "event"),
+}
+_TOKEN_EQUIVALENTS = {
+    "khz": "kilohertz",
+    "millisecond": "millisecond",
+    "milliseconds": "millisecond",
+    "ms": "millisecond",
+}
+_NUMBER_WORDS = {
+    "zero": 0,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+    "thirteen": 13,
+    "fourteen": 14,
+    "fifteen": 15,
+    "sixteen": 16,
+    "seventeen": 17,
+    "eighteen": 18,
+    "nineteen": 19,
+    "twenty": 20,
+    "thirty": 30,
+    "forty": 40,
+    "fifty": 50,
+    "sixty": 60,
+    "seventy": 70,
+    "eighty": 80,
+    "ninety": 90,
+}
+_NUMBER_SCALES = {"hundred": 100, "thousand": 1000}
+
+
+def _canonical_numeric_token(token: str) -> str:
+    normalized = token.replace(",", "")
+    if "." in normalized:
+        normalized = normalized.rstrip("0").rstrip(".")
+    return normalized or "0"
+
+
+def normalize_scoring_tokens(text: str) -> list[str]:
+    """Normalize narrow orthographic equivalence without fuzzy matching."""
+    lexical = re.findall(r"[a-z]+|\d[\d,]*(?:\.\d+)?", text.casefold())
+    expanded: list[str] = []
+    for token in lexical:
+        expanded.extend(_COMPOUND_EQUIVALENTS.get(token, (token,)))
+
+    normalized: list[str] = []
+    index = 0
+    while index < len(expanded):
+        token = expanded[index]
+        if token in _NUMBER_WORDS:
+            value = _NUMBER_WORDS[token]
+            if index + 1 < len(expanded) \
+                    and expanded[index + 1] in _NUMBER_SCALES:
+                normalized.append(str(value * _NUMBER_SCALES[expanded[index + 1]]))
+                index += 2
+                continue
+            if index + 2 < len(expanded) and expanded[index + 1] == "point" \
+                    and expanded[index + 2] in _NUMBER_WORDS \
+                    and _NUMBER_WORDS[expanded[index + 2]] < 10:
+                digits = [str(_NUMBER_WORDS[expanded[index + 2]])]
+                index += 3
+                while index < len(expanded) and expanded[index] in _NUMBER_WORDS \
+                        and _NUMBER_WORDS[expanded[index]] < 10:
+                    digits.append(str(_NUMBER_WORDS[expanded[index]]))
+                    index += 1
+                normalized.append(_canonical_numeric_token(
+                    f"{value}." + "".join(digits)))
+                continue
+            normalized.append(str(value))
+            index += 1
+            continue
+        if re.fullmatch(r"\d[\d,]*(?:\.\d+)?", token):
+            normalized.append(_canonical_numeric_token(token))
+        else:
+            normalized.append(_TOKEN_EQUIVALENTS.get(token, token))
+        index += 1
+    return normalized
+
+
 def _tokens(text: str) -> list[str]:
-    return re.findall(r"[a-z0-9]+", text.casefold())
+    return normalize_scoring_tokens(text)
 
 
-def word_error_rate(reference: str, hypothesis: str) -> float:
+def word_error_counts(reference: str, hypothesis: str) -> WordErrorCounts:
     expected = _tokens(reference)
     actual = _tokens(hypothesis)
     if not expected:
         raise ValueError("Reference text must contain at least one word")
-    previous = list(range(len(actual) + 1))
+
+    previous = [(column, 0, 0, column)
+                for column in range(len(actual) + 1)]
     for row, expected_word in enumerate(expected, start=1):
-        current = [row]
+        current = [(row, 0, row, 0)]
         for column, actual_word in enumerate(actual, start=1):
+            if expected_word == actual_word:
+                current.append(previous[column - 1])
+                continue
+            substitution = (
+                previous[column - 1][0] + 1,
+                previous[column - 1][1] + 1,
+                previous[column - 1][2],
+                previous[column - 1][3],
+            )
+            deletion = (
+                previous[column][0] + 1,
+                previous[column][1],
+                previous[column][2] + 1,
+                previous[column][3],
+            )
+            insertion = (
+                current[-1][0] + 1,
+                current[-1][1],
+                current[-1][2],
+                current[-1][3] + 1,
+            )
             current.append(min(
-                current[-1] + 1,
-                previous[column] + 1,
-                previous[column - 1] + (expected_word != actual_word),
-            ))
+                enumerate((substitution, deletion, insertion)),
+                key=lambda candidate: (candidate[1][0], candidate[0]),
+            )[1])
         previous = current
-    return previous[-1] / len(expected)
+    _, substitutions, deletions, insertions = previous[-1]
+    return WordErrorCounts(
+        substitutions=substitutions,
+        deletions=deletions,
+        insertions=insertions,
+        reference_tokens=len(expected),
+        hypothesis_tokens=len(actual),
+    )
+
+
+def word_error_rate(reference: str, hypothesis: str) -> float:
+    return word_error_counts(reference, hypothesis).wer
 
 
 def technical_term_recall(hypothesis: str, terms: Sequence[str]) -> tuple[float, int]:
     if not terms:
         raise ValueError("At least one technical term is required")
-    normalized = " ".join(_tokens(hypothesis))
-    matched = sum(" ".join(_tokens(term)) in normalized for term in terms)
+    normalized = _tokens(hypothesis)
+    matched = 0
+    for term in terms:
+        candidate = _tokens(term)
+        if any(normalized[index:index + len(candidate)] == candidate
+               for index in range(len(normalized) - len(candidate) + 1)):
+            matched += 1
     return matched / len(terms), matched
 
 
@@ -294,6 +536,8 @@ def safe_trial_report(
     term_recall: float | None,
     matched_terms: int,
     total_terms: int,
+    word_errors: WordErrorCounts | None,
+    audio_quality: Mapping[str, float | int | bool | None],
     interim_lags_ms: Sequence[float],
     final_lags_ms: Sequence[float],
     partial_events: int,
@@ -323,7 +567,19 @@ def safe_trial_report(
                 None if term_recall is None else round(term_recall, 6)),
             "matched_terms": matched_terms,
             "total_terms": total_terms,
+            "substitutions": (
+                word_errors.substitutions if word_errors is not None else None),
+            "deletions": (
+                word_errors.deletions if word_errors is not None else None),
+            "insertions": (
+                word_errors.insertions if word_errors is not None else None),
+            "reference_token_count": (
+                word_errors.reference_tokens if word_errors is not None else None),
+            "final_hypothesis_token_count": (
+                word_errors.hypothesis_tokens if word_errors is not None else None),
+            "scoring_methodology": "orthographic_equivalence_v2",
         },
+        "audio_quality": dict(audio_quality),
         "latency_ms": {
             "interim": _latency_summary(interim_lags_ms),
             "final": _latency_summary(final_lags_ms),
@@ -349,6 +605,8 @@ def safe_trial_report(
             "chunk_ms": 50,
             "endpointing_ms": 500,
             "diarization": False,
+            "keyterms": list(NOVA3_KEYTERMS),
+            "legacy_keywords": False,
             "network_context": network_context,
         },
         "privacy": {
@@ -424,6 +682,7 @@ async def _run_stream(
         started_at=started_at,
     )
     evidence = _StreamEvidence(stream_id=adapter.stream_id, adapter=adapter)
+    evidence.audio_quality = _AudioQuality(config)
     clock = _SentAudioClock(config)
     stream_started = time.monotonic()
     capture = None
@@ -466,6 +725,7 @@ async def _run_stream(
                     break
                 chunk = await capture.stdout.readexactly(config.chunk_bytes)
                 await websocket.send(chunk)
+                evidence.audio_quality.observe(chunk)
                 sent_at = time.monotonic()
                 clock.sent(len(chunk), sent_at)
                 evidence.sent_bytes += len(chunk)
@@ -574,9 +834,16 @@ def _combine_report(
     # Accuracy is reported for uninterrupted A/B only. Concatenating Trial C's
     # streams would conceal missing cross-stream speech, so it remains unknown.
     hypothesis = streams[0].final_text if len(streams) == 1 else ""
-    wer = word_error_rate(reference, hypothesis) if len(streams) == 1 else None
+    errors = word_error_counts(reference, hypothesis) if len(streams) == 1 else None
+    wer = errors.wer if errors is not None else None
     recall, matched = (technical_term_recall(hypothesis, TECHNICAL_TERMS)
                        if len(streams) == 1 else (None, 0))
+    qualities = [item.audio_quality for item in streams
+                 if item.audio_quality is not None]
+    combined_quality = _AudioQuality(
+        qualities[0].config if qualities else ListenConfig())
+    for quality in qualities:
+        combined_quality.merge(quality)
     report = safe_trial_report(
         trial=trial,
         duration_seconds=requested_duration,
@@ -585,6 +852,8 @@ def _combine_report(
         term_recall=recall,
         matched_terms=matched,
         total_terms=len(TECHNICAL_TERMS) if len(streams) == 1 else 0,
+        word_errors=errors,
+        audio_quality=combined_quality.summary(),
         interim_lags_ms=tuple(value for item in streams for value in item.interim_lags_ms),
         final_lags_ms=tuple(value for item in streams for value in item.final_lags_ms),
         partial_events=sum(item.partial_events for item in streams),
