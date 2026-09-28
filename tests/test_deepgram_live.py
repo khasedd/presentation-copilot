@@ -1,7 +1,9 @@
 """Offline tests for the bounded Deepgram microphone experiment harness."""
 import asyncio
 import json
+import math
 import os
+import struct
 import sys
 import tempfile
 import unittest
@@ -79,6 +81,7 @@ class DeepgramLiveConfigurationTests(unittest.TestCase):
             "endpointing": ["500"],
             "interim_results": ["true"],
             "language": ["en-US"],
+            "keyterm": list(deepgram_live.NOVA3_KEYTERMS),
             "mip_opt_out": ["true"],
             "model": ["nova-3"],
             "punctuate": ["true"],
@@ -86,6 +89,10 @@ class DeepgramLiveConfigurationTests(unittest.TestCase):
             "smart_format": ["true"],
             "vad_events": ["true"],
         })
+        self.assertNotIn("keywords", query)
+        self.assertEqual(parsed.query.count("keyterm="),
+                         len(deepgram_live.NOVA3_KEYTERMS))
+        self.assertIn("keyterm=Presentation+Copilot", parsed.query)
         self.assertNotIn("diarize", query)
         self.assertEqual(config.chunk_ms, 50)
         self.assertEqual(config.chunk_bytes, 1600)
@@ -119,6 +126,69 @@ class DeepgramLiveConfigurationTests(unittest.TestCase):
 
 
 class DeepgramLiveMeasurementTests(unittest.TestCase):
+    def test_scoring_normalizes_only_orthographic_and_numeric_equivalence(self):
+        reference = (
+            "Nova three linear sixteen WebSocket PipeWire WirePlumber "
+            "TranscriptEvent sixteen thousand fifty five hundred ninety "
+            "version one point zero"
+        )
+        hypothesis = (
+            "Nova-3 linear 16 web socket pipe wire wire-plumber "
+            "transcript event 16,000 50 500 90 version 1.0"
+        )
+        self.assertEqual(
+            deepgram_live.normalize_scoring_tokens(reference),
+            deepgram_live.normalize_scoring_tokens(hypothesis),
+        )
+        self.assertEqual(word_error_rate(reference, hypothesis), 0.0)
+        recall, matched = technical_term_recall(
+            hypothesis,
+            ("Nova three", "linear sixteen", "WebSocket", "PipeWire",
+             "WirePlumber", "TranscriptEvent"),
+        )
+        self.assertEqual((recall, matched), (1.0, 6))
+
+        self.assertGreater(word_error_rate("Nova three", "Nova tree"), 0.0)
+        self.assertEqual(
+            technical_term_recall("Nova tree", ("Nova three",)),
+            (0.0, 0),
+        )
+
+    def test_word_error_counts_decompose_substitution_deletion_and_insertion(self):
+        counts = deepgram_live.word_error_counts(
+            "alpha beta gamma delta",
+            "alpha wrong delta extra",
+        )
+        self.assertEqual(counts.substitutions, 1)
+        self.assertEqual(counts.deletions, 1)
+        self.assertEqual(counts.insertions, 1)
+        self.assertEqual(counts.reference_tokens, 4)
+        self.assertEqual(counts.hypothesis_tokens, 4)
+        self.assertEqual(counts.wer, 0.75)
+
+    def test_audio_quality_is_aggregate_only_and_reports_level_continuity(self):
+        config = ListenConfig(sample_rate=20, chunk_ms=100)
+        quality = deepgram_live._AudioQuality(config)
+        quality.observe(struct.pack("<hh", 0, 0))
+        quality.observe(struct.pack("<hh", 32767, -32768))
+
+        summary = quality.summary()
+        expected_rms = math.sqrt((32767 ** 2 + 32768 ** 2) / 4) / 32768
+        self.assertAlmostEqual(
+            summary["rms_dbfs"], 20 * math.log10(expected_rms), places=3)
+        self.assertEqual(summary["peak_dbfs"], 0.0)
+        self.assertEqual(summary["clipping_fraction"], 0.5)
+        self.assertEqual(summary["very_low_level_chunk_fraction"], 0.5)
+        self.assertEqual(summary["sample_count"], 4)
+        self.assertEqual(summary["chunk_count"], 2)
+        self.assertEqual(summary["transmitted_bytes"], 8)
+        self.assertEqual(summary["expected_transmitted_bytes"], 8)
+        self.assertTrue(summary["byte_sample_continuity"])
+        self.assertNotIn("samples", summary)
+
+        with self.assertRaises(ValueError):
+            quality.observe(b"\x00")
+
     def test_spoken_trial_completion_requires_endpoint_progress_and_silence(self):
         completion = deepgram_live._SpeechCompletion(
             minimum_final_tokens=4,
@@ -330,6 +400,7 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
         secret = "private-api-key"
         reference = "private reference words"
         hypothesis = "private hypothesis words"
+        counts = deepgram_live.word_error_counts(reference, hypothesis)
         report = safe_trial_report(
             trial="A",
             duration_seconds=90.0,
@@ -338,6 +409,18 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
             term_recall=0.9,
             matched_terms=9,
             total_terms=10,
+            word_errors=counts,
+            audio_quality={
+                "rms_dbfs": -20.0,
+                "peak_dbfs": -3.0,
+                "clipping_fraction": 0.0,
+                "very_low_level_chunk_fraction": 0.1,
+                "sample_count": 32000,
+                "chunk_count": 20,
+                "transmitted_bytes": 64000,
+                "expected_transmitted_bytes": 64000,
+                "byte_sample_continuity": True,
+            },
             interim_lags_ms=(120.0, 220.0),
             final_lags_ms=(600.0, 900.0),
             partial_events=4,
@@ -364,6 +447,9 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
         self.assertEqual(report["configuration"]["endpointing_ms"], 500)
         self.assertEqual(report["latency_ms"]["interim"]["sample_count"], 2)
         self.assertEqual(report["latency_ms"]["final"]["p95"], 900.0)
+        self.assertEqual(report["accuracy"]["substitutions"], 1)
+        self.assertEqual(report["accuracy"]["reference_token_count"], 3)
+        self.assertEqual(report["audio_quality"]["rms_dbfs"], -20.0)
         self.assertAlmostEqual(report["estimated_cost_usd"], 0.007296)
 
 
