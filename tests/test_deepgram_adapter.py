@@ -57,6 +57,49 @@ class DeepgramAdapterTests(unittest.TestCase):
         self.assertEqual((updates[-1].start_ms, updates[-1].end_ms), (0, 1100))
         self.assertEqual(self.adapter.accumulator.state.segments, (updates[-1],))
 
+    def test_active_provider_window_can_shift_between_revisions(self):
+        first = self.adapter.accept(result(
+            "provisional prefix", 0, 1,
+            words=[word("provisional", 0, 0.5), word("prefix", 0.5, 1)]),
+            observed_at_ms=1100)[0].payload
+        revised = self.adapter.accept(result(
+            "replacement window", 1.1, 0.9,
+            words=[word("replacement", 1.1, 1.5), word("window", 1.5, 2)]),
+            observed_at_ms=2100)[0].payload
+        final = self.adapter.accept(result(
+            "replacement window final", 1.05, 1.15, final=True,
+            words=[word("replacement", 1.05, 1.5),
+                   word("window", 1.5, 1.9), word("final", 1.9, 2.2)]),
+            observed_at_ms=2300)[0].payload
+
+        self.assertEqual(
+            {first.segment_id, revised.segment_id, final.segment_id},
+            {"stream-a:segment:0"},
+        )
+        self.assertEqual(
+            [(first.revision, first.start_ms, first.end_ms, first.status),
+             (revised.revision, revised.start_ms, revised.end_ms, revised.status),
+             (final.revision, final.start_ms, final.end_ms, final.status)],
+            [(1, 0, 1000, "partial"),
+             (2, 1100, 2000, "partial"),
+             (3, 1050, 2200, "final")],
+        )
+
+    def test_post_final_one_millisecond_start_drift_is_clipped(self):
+        settled = self.adapter.accept(result(
+            "settled", 0, 1, final=True,
+            words=[word("settled", 0, 1)]), observed_at_ms=1100)[0].payload
+        next_update = self.adapter.accept(result(
+            "next", 0.9994, 1.0006,
+            words=[word("next", 0.9994, 2)]), observed_at_ms=2100)[0].payload
+
+        self.assertEqual((settled.segment_index, settled.end_ms), (0, 1000))
+        self.assertEqual(
+            (next_update.segment_index, next_update.start_ms,
+             next_update.end_ms, next_update.status),
+            (1, 1000, 2000, "partial"),
+        )
+
     def test_shorter_final_finalizes_settled_span_and_opens_timed_remainder(self):
         self.adapter.accept(result(
             "alpha beta gamma", 0, 3,
@@ -251,8 +294,9 @@ class DeepgramAdapterTests(unittest.TestCase):
     def test_final_segment_cannot_return_to_partial(self):
         self.adapter.accept(result("settled", 0, 1, final=True), observed_at_ms=1100)
         before = self.adapter.accumulator.state
-        with self.assertRaises(DeepgramAdapterError):
+        with self.assertRaises(DeepgramAdapterError) as caught:
             self.adapter.accept(result("tentative", 0, 1.2), observed_at_ms=1300)
+        self.assertEqual(caught.exception.code, "result_overlaps_final")
         self.assertIs(self.adapter.accumulator.state, before)
 
     def test_shorter_final_without_timed_remainder_is_blocking_incompatibility(self):
