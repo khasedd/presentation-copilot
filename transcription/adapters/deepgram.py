@@ -25,6 +25,7 @@ from transcription.stream import TranscriptAccumulator
 
 PROVIDER = "deepgram-nova-3"
 _NO_OP_TYPES = frozenset({"Metadata", "SpeechStarted", "UtteranceEnd"})
+_RESULT_BOUNDARY_TOLERANCE_MS = 1
 
 
 class DeepgramAdapterError(ValueError):
@@ -73,6 +74,12 @@ def _error(code: str = "invalid_provider_message") -> DeepgramAdapterError:
         ),
         "invalid_result_transcript": "Deepgram result has invalid text",
         "invalid_transition": "Deepgram message contradicts the active segment",
+        "observation_before_result": (
+            "Deepgram result ends after its observation time"
+        ),
+        "result_overlaps_final": (
+            "Deepgram result substantially overlaps finalized audio"
+        ),
         "shorter_final_incompatible": (
             "Shorter Deepgram final cannot be normalized from available timing"
         ),
@@ -231,7 +238,7 @@ class DeepgramAdapter:
         observed_at_ms: int,
     ) -> TranscriptEvent:
         if end_ms > observed_at_ms:
-            raise _error()
+            raise _error("observation_before_result")
         return self._emit(SegmentUpdated(
             segment_id=segment_id,
             segment_index=segment_index,
@@ -246,7 +253,25 @@ class DeepgramAdapter:
     def _open_segment(self, result: _Result, observed_at_ms: int) -> TranscriptEvent:
         if (self._last_final_end_ms is not None
                 and result.start_ms < self._last_final_end_ms):
-            raise _error("invalid_transition")
+            overlap_ms = self._last_final_end_ms - result.start_ms
+            if overlap_ms > _RESULT_BOUNDARY_TOLERANCE_MS:
+                raise _error("result_overlaps_final")
+            boundary = self._last_final_end_ms
+            result = _Result(
+                text=result.text,
+                start_ms=boundary,
+                end_ms=result.end_ms,
+                is_final=result.is_final,
+                words=tuple(
+                    _Word(
+                        text=word.text,
+                        start_ms=max(word.start_ms, boundary),
+                        end_ms=word.end_ms,
+                    )
+                    for word in result.words
+                    if word.end_ms > boundary
+                ),
+            )
         index = self._next_segment_index
         segment_id = f"{self.stream_id}:segment:{index}"
         event = self._segment_update(
@@ -344,8 +369,9 @@ class DeepgramAdapter:
         active = self._active
         if active is None:
             return (self._open_segment(result, observed_at_ms),)
-        if result.start_ms != active.start_ms:
-            raise _error("invalid_transition")
+        # Deepgram exposes one current unfinalized window. Every subsequent
+        # interim replaces that provisional window, including its range; the
+        # provider start offset is not segment identity.
         if result.is_final and result.end_ms < active.end_ms:
             has_timed_remainder = any(
                 word.end_ms > result.end_ms for word in active.words)
