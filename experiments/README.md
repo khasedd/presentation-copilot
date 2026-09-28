@@ -57,16 +57,16 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-deepgram-poc.txt
 ```
 
-Display the fixed scripts before each trial with `sed -n '33,61p' experiments/deepgram_live.py`. Run only while the presenter is ready to speak, begin reading as soon as the command is launched, and rely on the command ending—not a separate chat cue—to know capture has stopped. Existing evidence files are never overwritten:
+Display the fixed scripts before each trial with `sed -n '33,61p' experiments/deepgram_live.py`. Run only while the presenter is ready to speak and begin reading as soon as the command is launched. For A/B, read the whole script and then stop speaking. The harness ends after enough finalized script progress, a provider endpoint, and eight seconds of silence; `--duration 240` is only a hard safety ceiling. If that ceiling is reached, the run is invalid and no evidence file is retained. Existing evidence files are never overwritten:
 
 ```bash
-.venv/bin/python -m experiments.deepgram_live --trial A --duration 90 \
+.venv/bin/python -m experiments.deepgram_live --trial A --duration 240 \
   --source alsa_input.pci-0000_63_00.6.analog-stereo \
   --native-format '48000 Hz, 2 channels, s16' \
   --network-context 'local residential network' \
   --output deepgram-output/trial-a.json
 
-.venv/bin/python -m experiments.deepgram_live --trial B --duration 90 \
+.venv/bin/python -m experiments.deepgram_live --trial B --duration 240 \
   --source alsa_input.pci-0000_63_00.6.analog-stereo \
   --native-format '48000 Hz, 2 channels, s16' \
   --network-context 'local residential network' \
@@ -80,3 +80,5 @@ Display the fixed scripts before each trial with `sed -n '33,61p' experiments/de
 ```
 
 Trials A and B use the 201-word presentation script near-field and at realistic presentation distance/ordinary room noise. Trial C uses the 95-word failure script and deliberately creates a failed first stream plus a fresh second stream. Do not combine Trial C text across streams. The fixed thresholds, preflight evidence, privacy limits, and remaining account uncertainty are documented in [the Phase 3 provider record](../docs/phase-3-transcription-options.md#implementation-and-preflight-evidence--september-27-2026).
+
+An earlier 90-second near-field run ended while the presenter was still reading. Its generated metrics are invalid and are not Trial A evidence. The completion guard above was added as a regression fix; fresh A, B and C trials remain pending. No audio, transcript/reference text, or credential was persisted.
