@@ -11,6 +11,7 @@ from types import ModuleType, SimpleNamespace
 from urllib.parse import parse_qs, urlparse
 from unittest.mock import AsyncMock, patch
 
+import experiments.deepgram_live as deepgram_live
 from experiments.deepgram_live import (
     ListenConfig,
     LiveExperimentError,
@@ -118,6 +119,41 @@ class DeepgramLiveConfigurationTests(unittest.TestCase):
 
 
 class DeepgramLiveMeasurementTests(unittest.TestCase):
+    def test_spoken_trial_completion_requires_endpoint_progress_and_silence(self):
+        completion = deepgram_live._SpeechCompletion(
+            minimum_final_tokens=4,
+            silence_seconds=8.0,
+        )
+
+        completion.observe({"type": "SpeechStarted"}, observed_at=1.0)
+        self.assertFalse(completion.ready(
+            observed_at=20.0, final_text="one two three four"))
+
+        completion.observe(
+            result("one two three four", 0, 2, final=True),
+            observed_at=10.0,
+        )
+        self.assertFalse(completion.ready(
+            observed_at=17.999, final_text="one two three four"))
+        self.assertTrue(completion.ready(
+            observed_at=18.0, final_text="one two three four"))
+
+        completion.observe({"type": "SpeechStarted"}, observed_at=18.1)
+        self.assertFalse(completion.ready(
+            observed_at=30.0, final_text="one two three four"))
+
+    def test_spoken_trial_completion_requires_enough_final_text(self):
+        completion = deepgram_live._SpeechCompletion(
+            minimum_final_tokens=5,
+            silence_seconds=8.0,
+        )
+        completion.observe(
+            result("one two three four", 0, 2, final=True),
+            observed_at=10.0,
+        )
+        self.assertFalse(completion.ready(
+            observed_at=30.0, final_text="one two three four"))
+
     def test_stream_transport_consumes_metadata_result_and_interrupts_safely(self):
         class FakeConnectionClosed(Exception):
             pass
@@ -332,6 +368,23 @@ class DeepgramLiveMeasurementTests(unittest.TestCase):
 
 
 class DeepgramLiveCliTests(unittest.TestCase):
+    def test_spoken_trial_refuses_to_score_a_safety_limit_cutoff(self):
+        cutoff = evidence("cutoff")
+        cutoff.completion_reason = "max_duration"
+        with patch("experiments.deepgram_live._run_stream",
+                   new_callable=AsyncMock, return_value=cutoff):
+            with self.assertRaisesRegex(
+                    LiveExperimentError,
+                    "safety limit before the presenter finished"):
+                asyncio.run(run_trial(
+                    trial="A",
+                    key="local-test-key",
+                    source="internal-mic",
+                    duration_seconds=100,
+                    native_format="native",
+                    network_context="local",
+                ))
+
     def test_trial_orchestration_uses_one_stream_or_two_fresh_streams(self):
         first = evidence("stream-one")
         second = evidence("stream-two")
