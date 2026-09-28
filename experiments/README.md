@@ -48,7 +48,9 @@ The [small four-model benchmark](BENCHMARK.md) reuses these exact cases and vali
 
 ## Bounded Deepgram microphone experiment
 
-`deepgram_live.py` is the non-production Phase 3 Nova-3 trial harness. It captures the explicitly named PipeWire-Pulse source with `parec`, requests conversion to 16 kHz mono signed-16 PCM, sends 50 ms chunks over the lower-level Deepgram WebSocket, and normalizes callbacks through the same transcript accumulator used by replay. It writes aggregate measurements only. Raw audio, recognized/reference text, provider response bodies, and credentials are never written; `deepgram-output/` and `.env` are ignored.
+`deepgram_live.py` is the non-production Phase 3 Nova-3 trial harness. It captures the explicitly named PipeWire-Pulse source with `parec`, requests conversion to 16 kHz mono signed-16 PCM, sends 50 ms chunks over the lower-level Deepgram WebSocket, and normalizes callbacks through the same transcript accumulator used by replay. The request sends the fixed trial vocabulary as repeated Nova-3 `keyterm` parameters and never uses legacy `keywords`. It writes aggregate measurements only. Raw audio, recognized/reference text, provider response bodies, and credentials are never written; `deepgram-output/` and `.env` are ignored.
+
+Scored runs use the provider-neutral `orthographic_equivalence_v2` method. It normalizes case, punctuation/hyphen separators, equivalent digit/number-word/decimal forms, `kHz`/“kilohertz”, `ms`/“millisecond(s)”, and the enumerated joined/separated compounds `PipeWire`, `WirePlumber`, `WebSocket`, and `TranscriptEvent`. It does not use fuzzy, phonetic, stemming, synonym, or semantic matching. Reports include S/D/I and reference/final-hypothesis token counts. They also include in-memory-only RMS/peak dBFS, clipping and below -50 dBFS chunk fractions, counts, and byte/sample continuity; these are diagnostics for obvious input-level/continuity problems, not a general noise-quality score.
 
 Set `DEEPGRAM_API_KEY` in the environment or the ignored local `.env`, then install the one exact POC dependency in an ignored virtual environment:
 
@@ -66,6 +68,13 @@ Display the fixed scripts before each trial with `sed -n '33,61p' experiments/de
   --network-context 'local residential network' \
   --output deepgram-output/trial-a.json
 
+# One bounded post-audit rerun; preserves the original trial-a.json.
+.venv/bin/python -m experiments.deepgram_live --trial A --duration 240 \
+  --source alsa_input.pci-0000_63_00.6.analog-stereo \
+  --native-format '48000 Hz, 2 channels, s16' \
+  --network-context 'local residential network' \
+  --output deepgram-output/trial-a-keyterm-rerun.json
+
 .venv/bin/python -m experiments.deepgram_live --trial B --duration 240 \
   --source alsa_input.pci-0000_63_00.6.analog-stereo \
   --native-format '48000 Hz, 2 channels, s16' \
@@ -81,4 +90,4 @@ Display the fixed scripts before each trial with `sed -n '33,61p' experiments/de
 
 Trials A and B use the 201-word presentation script near-field and at realistic presentation distance/ordinary room noise. Trial C uses the 95-word failure script and deliberately creates a failed first stream plus a fresh second stream. Do not combine Trial C text across streams. The fixed thresholds, preflight evidence, privacy limits, and remaining account uncertainty are documented in [the Phase 3 provider record](../docs/phase-3-transcription-options.md#implementation-and-preflight-evidence--september-27-2026).
 
-An earlier 90-second near-field run ended while the presenter was still reading. Its generated metrics are invalid and are not Trial A evidence. After the completion-guard fix, a valid Trial A completed with presenter confirmation. It passed the fixed latency and revision-behavior limits but failed accuracy: 31.8408% WER and 36.3636% technical-term recall. Its owner-only aggregate file remains ignored; no audio, transcript/reference text, or credential was persisted. This is a failed configuration result, not a passed provider selection. Trials B and C remain pending.
+An earlier 90-second near-field run ended while the presenter was still reading. Its generated metrics are invalid and are not Trial A evidence. After the completion-guard fix, a valid Trial A completed with presenter confirmation. It passed the fixed latency and revision-behavior limits but failed accuracy: 31.8408% WER and 36.3636% technical-term recall. Its owner-only aggregate file remains ignored; no audio, transcript/reference text, or credential was persisted. This is a failed original configuration result, not a passed provider selection. A deterministic audit then proved representation artifacts in the original lexical scorer; the corrected scorer, S/D/I evidence, aggregate audio diagnostics, and fixed Nova-3 keyterms pass offline tests. The original result remains unchanged. Exactly one fresh near-field rerun is pending; Trials B/C and Parakeet work remain held for owner review.
